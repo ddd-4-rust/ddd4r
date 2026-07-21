@@ -21,10 +21,10 @@
 | UnitOfWork/Outbox | 进行中 | SPI、内存 Outbox claim/publish/retry/dead-letter 状态机 |
 | DDD Rules/Clean/COLA | 进行中 | Cargo Metadata 建图、`syn` 源码引用核验、分层和框架依赖违规测试 |
 | 应用级 Cache | 进行中 | 内存 Cache、TTL、CAS、Stats |
-| 数据后端共享契约 | 进行中 | capability model + 统一 CRUD/query/page/optimistic-lock conformance suite |
+| 数据后端共享契约 | 进行中 | 三后端独立执行统一 CRUD/query/page/optimistic-lock conformance suite |
 | SQLx | 进行中 | SQLx 0.9 + SQLite 真实执行纵切已通过；其余数据库和高级能力未完成 |
 | RBatis | 进行中 | RBatis 4.9.6 + RBDC SQLite 已通过共享仓储契约和显式 commit/rollback；高级能力未完成 |
-| SeaORM | 计划中 | 尚未计入完成；不得复用 SQLx/RBatis 的通过证据 |
+| SeaORM | 进行中 | SeaORM 2.0 + SQLite 已独立通过共享仓储契约和显式 commit/rollback；高级能力未完成 |
 | RBatis 扩展族 | 计划中 | 归属 rbatis-plus 组织 |
 | Web/Auth/MQ/Runtime | 计划中 | 逐模块移植 |
 

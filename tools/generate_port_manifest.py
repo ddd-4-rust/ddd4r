@@ -34,6 +34,7 @@ IN_PROGRESS = {
     "ddd4j-ddd-rules-clean",
     "ddd4j-ddd-rules-cola",
     "ddd4j-data",
+    "ddd4j-data-jpa",
     "ddd4j-data-mybatis",
 }
 
@@ -51,6 +52,7 @@ API_EVIDENCE = {
         "modules/ddd-rules/ddd4r-ddd-rules-cola/src/lib.rs"
     ],
     "ddd4j-data": ["modules/data/ddd4r-data/src/lib.rs"],
+    "ddd4j-data-jpa": ["modules/data/ddd4r-data-seaorm/src/lib.rs"],
     "ddd4j-data-mybatis": ["modules/data/ddd4r-data-rbatis/src/lib.rs"],
 }
 
@@ -76,7 +78,12 @@ TEST_EVIDENCE = {
         "modules/ddd-rules/ddd4r-ddd-rules/tests/architecture_contract.rs"
     ],
     "ddd4j-data": [
-        "modules/data/ddd4r-data-sqlx/tests/sqlite_conformance.rs"
+        "modules/data/ddd4r-data-rbatis/tests/sqlite_conformance.rs",
+        "modules/data/ddd4r-data-seaorm/tests/sqlite_conformance.rs",
+        "modules/data/ddd4r-data-sqlx/tests/sqlite_conformance.rs",
+    ],
+    "ddd4j-data-jpa": [
+        "modules/data/ddd4r-data-seaorm/tests/sqlite_conformance.rs"
     ],
     "ddd4j-data-mybatis": [
         "modules/data/ddd4r-data-rbatis/tests/sqlite_conformance.rs"
@@ -101,6 +108,9 @@ CORE_BEHAVIORS = {
     "ddd4j-ddd-rules-cola": ["COLA layer and framework rules"],
     "ddd4j-data": [
         "shared backend capability model and executable repository conformance suite"
+    ],
+    "ddd4j-data-jpa": [
+        "SeaORM CRUD, query, page, optimistic lock, and explicit transaction adapter"
     ],
     "ddd4j-data-mybatis": [
         "RBatis CRUD, query, page, optimistic lock, and explicit transaction adapter"

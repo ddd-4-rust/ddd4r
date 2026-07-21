@@ -194,8 +194,8 @@ rust_package = "ddd4r-data"
 rust_path = "modules/data/ddd4r-data"
 status = "in_progress"
 api_evidence = ["modules/data/ddd4r-data/src/lib.rs"]
-test_evidence = ["modules/data/ddd4r-data-sqlx/tests/sqlite_conformance.rs"]
-acceptance_evidence = ["modules/data/ddd4r-data/src/lib.rs", "modules/data/ddd4r-data-sqlx/tests/sqlite_conformance.rs"]
+test_evidence = ["modules/data/ddd4r-data-rbatis/tests/sqlite_conformance.rs", "modules/data/ddd4r-data-seaorm/tests/sqlite_conformance.rs", "modules/data/ddd4r-data-sqlx/tests/sqlite_conformance.rs"]
+acceptance_evidence = ["modules/data/ddd4r-data/src/lib.rs", "modules/data/ddd4r-data-rbatis/tests/sqlite_conformance.rs", "modules/data/ddd4r-data-seaorm/tests/sqlite_conformance.rs", "modules/data/ddd4r-data-sqlx/tests/sqlite_conformance.rs"]
 known_semantic_differences = []
 
 [[module]]
@@ -265,13 +265,13 @@ java_public_types = ["io.ddd4j.data.jpa.AutoIncrementIdStrategy", "io.ddd4j.data
 java_public_methods = ["io.ddd4j.data.jpa.AutoIncrementIdStrategy#generate", "io.ddd4j.data.jpa.IdGenerationStrategy#generate", "io.ddd4j.data.jpa.JpaAggregateRepository#count", "io.ddd4j.data.jpa.JpaAggregateRepository#deleteById", "io.ddd4j.data.jpa.JpaAggregateRepository#deleteByIds", "io.ddd4j.data.jpa.JpaAggregateRepository#deleteByQuery", "io.ddd4j.data.jpa.JpaAggregateRepository#fill", "io.ddd4j.data.jpa.JpaAggregateRepository#findAll", "io.ddd4j.data.jpa.JpaAggregateRepository#findById", "io.ddd4j.data.jpa.JpaAggregateRepository#findByIds", "io.ddd4j.data.jpa.JpaAggregateRepository#findFirst", "io.ddd4j.data.jpa.JpaAggregateRepository#findList", "io.ddd4j.data.jpa.JpaAggregateRepository#insertOrUpdateBatch", "io.ddd4j.data.jpa.JpaAggregateRepository#maps", "io.ddd4j.data.jpa.JpaAggregateRepository#page", "io.ddd4j.data.jpa.JpaAggregateRepository#save", "io.ddd4j.data.jpa.JpaAggregateRepository#saveBatch", "io.ddd4j.data.jpa.JpaAggregateRepository#toModel", "io.ddd4j.data.jpa.JpaAggregateRepository#toPersistenceObject", "io.ddd4j.data.jpa.JpaAggregateRepository#updateBatchById", "io.ddd4j.data.jpa.SnowflakeIdGenerator#nextId", "io.ddd4j.data.jpa.SnowflakeIdStrategy#generate", "io.ddd4j.data.jpa.TenantAwareEntity#getId", "io.ddd4j.data.jpa.TenantAwareEntity#getTenantId", "io.ddd4j.data.jpa.TenantAwareEntity#toString", "io.ddd4j.data.jpa.TenantAwareEntityBase#getCreatedTime", "io.ddd4j.data.jpa.TenantAwareEntityBase#getUpdatedTime", "io.ddd4j.data.jpa.TenantAwareId#equals", "io.ddd4j.data.jpa.TenantAwareId#hashCode", "io.ddd4j.data.jpa.TenantAwareId#of", "io.ddd4j.data.jpa.UuidIdStrategy#generate", "io.ddd4j.data.jpa.crypto.JpaEncryptFieldListener#postLoad", "io.ddd4j.data.jpa.crypto.JpaEncryptFieldListener#prePersist", "io.ddd4j.data.jpa.crypto.JpaEncryptFieldListener#preUpdate"]
 java_dependencies = ["io.ddd4j:ddd4j-core", "io.ddd4j:ddd4j-data-crypto", "io.ddd4j:ddd4j-kit", "jakarta.persistence:jakarta.persistence-api", "org.apache.commons:commons-lang3", "org.assertj:assertj-core", "org.junit.jupiter:junit-jupiter", "org.mockito:mockito-core", "org.slf4j:slf4j-api"]
 java_tests = ["ddd4j-data/ddd4j-data-jpa/src/test/java/io/ddd4j/data/jpa/JpaAggregateRepositoryTest.java"]
-core_behaviors = []
+core_behaviors = ["SeaORM CRUD, query, page, optimistic lock, and explicit transaction adapter"]
 rust_package = "ddd4r-data-seaorm"
 rust_path = "modules/data/ddd4r-data-seaorm"
-status = "scaffolded"
-api_evidence = []
-test_evidence = []
-acceptance_evidence = []
+status = "in_progress"
+api_evidence = ["modules/data/ddd4r-data-seaorm/src/lib.rs"]
+test_evidence = ["modules/data/ddd4r-data-seaorm/tests/sqlite_conformance.rs"]
+acceptance_evidence = ["modules/data/ddd4r-data-seaorm/src/lib.rs", "modules/data/ddd4r-data-seaorm/tests/sqlite_conformance.rs"]
 known_semantic_differences = []
 
 [[module]]
