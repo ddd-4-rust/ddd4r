@@ -25,7 +25,7 @@
 | SQLx | 进行中 | SQLx 0.9 + SQLite 仓储、显式事务、事务 Outbox 原子提交/回滚已通过；其余数据库和高级能力未完成 |
 | RBatis | 进行中 | RBatis 4.9.6 + 固定 fork `bc904e9a`；RBDC SQLite 仓储、显式事务、事务 Outbox 与原生有界行流已通过；[上游 PR #623](https://github.com/rbatis/rbatis/pull/623) 待合并 |
 | SeaORM | 进行中 | SeaORM 2.0 + SQLite 仓储、显式事务、事务 Outbox 原子提交/回滚已通过；高级能力未完成 |
-| RBatis 扩展族 | 进行中 | cache-core、caffeine、redis、memcached、r2dbc、typehandlers-jsr310、rbatis-plus 已独立建仓并固定 revision；rbatis-plus 原生 Mapper CRUD/批量/分页、Wrapper、乐观锁和逻辑删除，以及 `ddd4r-data-rbatisplus` 共享 SQLite/Outbox 契约通过；高级增强及 Redis Cluster/Sentinel 拓扑仍未完成 |
+| RBatis 扩展族 | 进行中 | 独立仓库均固定 revision；rbatis-plus 原生 Mapper、Wrapper、乐观锁、逻辑删除、AES-GCM、blind index、行签名/轮换/部分行策略、审计填充与 ddd4r SQLite/Outbox 契约通过；SM4/SM3、Mapper 自动装配、四数据库及 Redis Cluster/Sentinel 拓扑仍未完成 |
 | Web/Auth/MQ/Runtime | 计划中 | 逐模块移植 |
 
 任何没有实现和测试证据的包都不能标记为 `complete`，也不能计入 `1.0.0` 发布门禁。

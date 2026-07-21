@@ -29,10 +29,12 @@ Edition 2024 和 Tokio，并以 `MIT OR Apache-2.0` 双许可证发布。
 - `rbatis-plus` 已建立 core/macros/extension/codegen/facade 五 crate 纵切，原生 Mapper 已执行
   CRUD、原子批量、分页、强类型 Query/Update Wrapper、乐观锁与逻辑删除；ddd4r 适配包同时
   通过该 Mapper 的真实 SQLite 验收和共享 Repository/事务 Outbox 契约。
+- `rbatis-plus` 安全管线实现 AES-256-GCM 随机 nonce 字段加密、上下文 blind index、HMAC 行签名、
+  密钥轮换、`REJECT_PARTIAL`/`DEFERRED_RESIGN` 和审计填充；结果阶段固定先验签再解密。
 
 三套后端当前都只完成 SQLite 纵切；事务 Outbox 原子写入已为 `Supported`，但 claim、重试
-和死信调度仍由后续持久化 `OutboxStore` 补齐。逻辑删除、租户、数据权限、审计和 Event
-Sourcing 仍为 `Planned`。PostgreSQL、MySQL、SQL Server 及这些高级能力全部通过前，任何
+和死信调度仍由后续持久化 `OutboxStore` 补齐。三套 Repository 统一层面的逻辑删除、租户、
+数据权限、审计和 Event Sourcing 仍为 `Planned`。PostgreSQL、MySQL、SQL Server 及这些高级能力全部通过前，任何
 适配器都不能作为稳定后端发布。
 
 ## 权威入口

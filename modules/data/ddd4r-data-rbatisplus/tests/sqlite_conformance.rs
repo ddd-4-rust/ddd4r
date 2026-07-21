@@ -7,6 +7,7 @@ use ddd4r_data_rbatisplus::{RbatisPlusBackend, RbatisPlusRepository};
 use rbatis::RBatis;
 use rbdc_sqlite::SqliteDriver;
 use serde::{Deserialize, Serialize};
+use serde_json::json;
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, ddd4r_data_rbatisplus::PlusModel)]
 #[rbatis_plus(
@@ -99,4 +100,54 @@ async fn native_rbatis_plus_mapper_executes_optimistic_and_logical_delete_contra
     assert_eq!(found, [updated]);
     assert!(mapper.delete_by_id(7).await.unwrap());
     assert!(mapper.select_by_id(7).await.unwrap().is_none());
+}
+
+#[test]
+fn security_pipeline_is_reexported_and_fails_closed_on_tampering() {
+    use ddd4r_data_rbatisplus::{
+        AesGcmKeyRing, FieldCipher, PartialRowPolicy, RowSignatureService, SignatureScope,
+        VerificationOutcome,
+    };
+
+    let cipher =
+        AesGcmKeyRing::new("current", [("current".to_owned(), [9; 32])], [11; 32]).unwrap();
+    let envelope = cipher.encrypt(b"sensitive", b"orders.secret").unwrap();
+    assert_eq!(
+        cipher.decrypt(&envelope, b"orders.secret").unwrap(),
+        b"sensitive"
+    );
+    assert!(cipher.decrypt(&envelope, b"users.secret").is_err());
+
+    let signer =
+        RowSignatureService::new("current", [("current".to_owned(), vec![5; 32])]).unwrap();
+    let row = json!({"id": 7, "secret": envelope});
+    let signature = signer
+        .sign(&row, &["id", "secret"], SignatureScope::FullRow)
+        .unwrap();
+    assert_eq!(
+        signer
+            .verify(
+                &row,
+                &["id", "secret"],
+                &["id", "secret"],
+                SignatureScope::FullRow,
+                &signature,
+                PartialRowPolicy::RejectPartial,
+            )
+            .unwrap(),
+        VerificationOutcome::Verified
+    );
+    let tampered = json!({"id": 7, "secret": "modified"});
+    assert!(
+        signer
+            .verify(
+                &tampered,
+                &["id", "secret"],
+                &["id", "secret"],
+                SignatureScope::FullRow,
+                &signature,
+                PartialRowPolicy::RejectPartial,
+            )
+            .is_err()
+    );
 }
