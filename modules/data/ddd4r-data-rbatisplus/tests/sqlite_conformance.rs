@@ -102,6 +102,109 @@ async fn native_rbatis_plus_mapper_executes_optimistic_and_logical_delete_contra
     assert!(mapper.select_by_id(7).await.unwrap().is_none());
 }
 
+#[tokio::test]
+async fn native_mapper_executes_transactional_upsert_and_batch_rollback_contracts() {
+    use ddd4r_data_rbatisplus::{BaseMapper, RbatisMapper};
+
+    let rbatis = RBatis::new();
+    rbatis
+        .link(SqliteDriver {}, "sqlite://:memory:")
+        .await
+        .unwrap();
+    rbatis
+        .exec(
+            "CREATE TABLE plus_orders (id INTEGER PRIMARY KEY, name TEXT NOT NULL, \
+             version INTEGER NOT NULL, deleted INTEGER NOT NULL)",
+            vec![],
+        )
+        .await
+        .unwrap();
+    let mapper = RbatisMapper::<PlusOrderPo, i64>::new(rbatis).unwrap();
+
+    let inserted = mapper
+        .save_or_update_batch(vec![
+            PlusOrderPo {
+                id: 1,
+                name: "first".to_owned(),
+                version: 0,
+                deleted: 0,
+            },
+            PlusOrderPo {
+                id: 2,
+                name: "second".to_owned(),
+                version: 0,
+                deleted: 0,
+            },
+        ])
+        .await
+        .unwrap();
+    assert_eq!(inserted.len(), 2);
+
+    let mixed = mapper
+        .save_or_update_batch(vec![
+            PlusOrderPo {
+                id: 1,
+                name: "updated".to_owned(),
+                version: 0,
+                deleted: 0,
+            },
+            PlusOrderPo {
+                id: 3,
+                name: "new".to_owned(),
+                version: 0,
+                deleted: 0,
+            },
+        ])
+        .await
+        .unwrap();
+    assert_eq!(mixed[0].version, 1);
+    assert_eq!(mixed[1].version, 0);
+
+    let error = mapper
+        .update_batch_by_id(vec![
+            PlusOrderPo {
+                id: 1,
+                name: "must-rollback".to_owned(),
+                version: 1,
+                deleted: 0,
+            },
+            PlusOrderPo {
+                id: 99,
+                name: "missing".to_owned(),
+                version: 0,
+                deleted: 0,
+            },
+        ])
+        .await
+        .unwrap_err();
+    assert!(error.to_string().contains("optimistic lock conflict"));
+    let unchanged = mapper.select_by_id(1).await.unwrap().unwrap();
+    assert_eq!(unchanged.name, "updated");
+    assert_eq!(unchanged.version, 1);
+
+    let stale_error = mapper
+        .update_batch_by_id(vec![
+            PlusOrderPo {
+                id: 2,
+                name: "temporary".to_owned(),
+                version: 0,
+                deleted: 0,
+            },
+            PlusOrderPo {
+                id: 2,
+                name: "stale".to_owned(),
+                version: 0,
+                deleted: 0,
+            },
+        ])
+        .await
+        .unwrap_err();
+    assert!(stale_error.to_string().contains("optimistic lock conflict"));
+    let second = mapper.select_by_id(2).await.unwrap().unwrap();
+    assert_eq!(second.name, "second");
+    assert_eq!(second.version, 0);
+}
+
 #[test]
 fn security_pipeline_is_reexported_and_fails_closed_on_tampering() {
     use ddd4r_data_rbatisplus::{

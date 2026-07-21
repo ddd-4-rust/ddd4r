@@ -27,8 +27,8 @@ Edition 2024 和 Tokio，并以 `MIT OR Apache-2.0` 双许可证发布。
 - `rbatis-r2dbc` 将 RBDC 原生行流提升为强类型、有界预取、取消可传播的 `Stream`，并提供
   commit/rollback/Drop 回滚事务作用域；RBatis Hook 已提交上游 PR #623。
 - `rbatis-plus` 已建立 core/macros/extension/codegen/facade 五 crate 纵切，原生 Mapper 已执行
-  CRUD、原子批量、分页、强类型 Query/Update Wrapper、乐观锁与逻辑删除；ddd4r 适配包同时
-  通过该 Mapper 的真实 SQLite 验收和共享 Repository/事务 Outbox 契约。
+  CRUD、事务化批量插入/更新/混合 Upsert、分页、强类型 Query/Update Wrapper、乐观锁与逻辑删除；
+  ddd4r 适配包同时通过该 Mapper 的真实 SQLite 回滚验收和共享 Repository/事务 Outbox 契约。
 - `rbatis-plus` 安全管线实现 AES-256-GCM 随机 nonce 字段加密、上下文 blind index、HMAC 行签名、
   密钥轮换、`REJECT_PARTIAL`/`DEFERRED_RESIGN` 和审计填充；`RbatisMapper` 已在真实 SQLite
   执行中接通写前变换、SQL 重写、先验签后解密与最终观测。
