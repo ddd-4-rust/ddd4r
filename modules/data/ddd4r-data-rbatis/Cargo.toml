@@ -11,6 +11,16 @@ publish = false
 
 [dependencies]
 ddd4r-core = { path = "../../../crates/ddd4r-core", version = "=0.1.0-alpha.1" }
+ddd4r-data = { path = "../ddd4r-data", version = "=0.1.0-alpha.1" }
+futures.workspace = true
+rbatis.workspace = true
+rbdc-sqlite.workspace = true
+rbs.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+
+[dev-dependencies]
+tokio.workspace = true
 
 [lints]
 workspace = true

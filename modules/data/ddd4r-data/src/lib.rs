@@ -5,8 +5,8 @@
 use ddd4r_core::domain::{AggregateRoot, DomainModel, Entity};
 use ddd4r_core::event::EventEnvelope;
 use ddd4r_core::module::{ModuleDescriptor, ModuleMaturity};
-use ddd4r_core::query::{Order, PropertyRef, Query};
-use ddd4r_core::repository::Repository;
+use ddd4r_core::query::{Condition, Operator, Order, Page, PropertyRef, Query};
+use ddd4r_core::repository::{Repository, RepositoryRow};
 use ddd4r_core::{DddError, DddResult};
 use serde::{Deserialize, Serialize};
 
@@ -231,4 +231,155 @@ fn conformance_error(message: &str) -> DddError {
         adapter: "data-conformance",
         message: message.to_owned(),
     }
+}
+
+/// Filters and orders already-loaded aggregates using the shared query semantics.
+pub fn matching_aggregates<A>(
+    aggregates: impl IntoIterator<Item = A>,
+    query: &Query<A>,
+) -> DddResult<Vec<A>>
+where
+    A: AggregateRoot + Serialize,
+{
+    let mut matches = Vec::new();
+    for aggregate in aggregates {
+        if matches_query(&aggregate, query)? {
+            matches.push(aggregate);
+        }
+    }
+    matches.sort_by(|left, right| compare_aggregates(left, right, query));
+    Ok(matches)
+}
+
+/// Applies the common one-based page contract to ordered aggregates.
+pub fn page_aggregates<A>(aggregates: Vec<A>, query: &Query<A>) -> DddResult<Page<A>>
+where
+    A: AggregateRoot,
+{
+    let total = u64::try_from(aggregates.len()).map_err(|error| DddError::Adapter {
+        adapter: "data-query",
+        message: error.to_string(),
+    })?;
+    let size = query
+        .page
+        .size
+        .unwrap_or_else(|| u64::try_from(aggregates.len()).unwrap_or(u64::MAX));
+    let offset = query.page.current.saturating_sub(1).saturating_mul(size);
+    let offset = usize::try_from(offset).unwrap_or(usize::MAX);
+    let limit = usize::try_from(size).unwrap_or(usize::MAX);
+    Ok(Page {
+        records: aggregates.into_iter().skip(offset).take(limit).collect(),
+        total,
+        current: query.page.current,
+        size,
+    })
+}
+
+/// Converts aggregates to map rows and applies an optional select list.
+pub fn selected_rows<A>(aggregates: Vec<A>, query: &Query<A>) -> DddResult<Vec<RepositoryRow>>
+where
+    A: AggregateRoot + Serialize,
+{
+    aggregates
+        .into_iter()
+        .map(|aggregate| {
+            let serde_json::Value::Object(mut row) = serde_json::to_value(aggregate)? else {
+                return Err(DddError::Adapter {
+                    adapter: "data-query",
+                    message: "aggregate must serialize as an object".to_owned(),
+                });
+            };
+            if !query.select_columns.is_empty() {
+                row.retain(|key, _| query.select_columns.contains(key));
+            }
+            Ok(row)
+        })
+        .collect()
+}
+
+fn matches_query<A>(aggregate: &A, query: &Query<A>) -> DddResult<bool>
+where
+    A: AggregateRoot + Serialize,
+{
+    let serde_json::Value::Object(object) = serde_json::to_value(aggregate)? else {
+        return Ok(false);
+    };
+    Ok(query
+        .conditions
+        .iter()
+        .all(|condition| matches_condition(object.get(&condition.property), condition)))
+}
+
+fn matches_condition(value: Option<&serde_json::Value>, condition: &Condition) -> bool {
+    let first = condition.operands.first();
+    match condition.operator {
+        Operator::Eq => value == first,
+        Operator::Ne => value != first,
+        Operator::Gt => compare_values(value, first).is_gt(),
+        Operator::Ge => !compare_values(value, first).is_lt(),
+        Operator::Lt => compare_values(value, first).is_lt(),
+        Operator::Le => !compare_values(value, first).is_gt(),
+        Operator::Like => text(value)
+            .is_some_and(|value| text(first).is_some_and(|operand| value.contains(operand))),
+        Operator::LikeLeft => text(value)
+            .is_some_and(|value| text(first).is_some_and(|operand| value.ends_with(operand))),
+        Operator::LikeRight => text(value)
+            .is_some_and(|value| text(first).is_some_and(|operand| value.starts_with(operand))),
+        Operator::NotLike => !matches_condition(
+            value,
+            &Condition {
+                property: condition.property.clone(),
+                operator: Operator::Like,
+                operands: condition.operands.clone(),
+            },
+        ),
+        Operator::In => value.is_some_and(|value| condition.operands.contains(value)),
+        Operator::NotIn => value.is_none_or(|value| !condition.operands.contains(value)),
+        Operator::IsNull => value.is_none_or(serde_json::Value::is_null),
+        Operator::IsNotNull => value.is_some_and(|value| !value.is_null()),
+    }
+}
+
+fn compare_aggregates<A>(left: &A, right: &A, query: &Query<A>) -> std::cmp::Ordering
+where
+    A: AggregateRoot + Serialize,
+{
+    let left = serde_json::to_value(left).unwrap_or(serde_json::Value::Null);
+    let right = serde_json::to_value(right).unwrap_or(serde_json::Value::Null);
+    for order in &query.orders {
+        let ordering = compare_values(left.get(&order.property), right.get(&order.property));
+        if !ordering.is_eq() {
+            return if order.ascending {
+                ordering
+            } else {
+                ordering.reverse()
+            };
+        }
+    }
+    std::cmp::Ordering::Equal
+}
+
+fn compare_values(
+    left: Option<&serde_json::Value>,
+    right: Option<&serde_json::Value>,
+) -> std::cmp::Ordering {
+    use serde_json::Value;
+    use std::cmp::Ordering;
+
+    match (left, right) {
+        (Some(Value::Number(left)), Some(Value::Number(right))) => left
+            .as_f64()
+            .partial_cmp(&right.as_f64())
+            .unwrap_or(Ordering::Equal),
+        (Some(Value::String(left)), Some(Value::String(right))) => left.cmp(right),
+        (Some(Value::Bool(left)), Some(Value::Bool(right))) => left.cmp(right),
+        (None | Some(Value::Null), None | Some(Value::Null)) => Ordering::Equal,
+        (None | Some(Value::Null), _) => Ordering::Less,
+        (_, None | Some(Value::Null)) => Ordering::Greater,
+        (Some(left), Some(right)) => left.to_string().cmp(&right.to_string()),
+    }
+}
+
+fn text(value: Option<&serde_json::Value>) -> Option<&str> {
+    value.and_then(serde_json::Value::as_str)
 }

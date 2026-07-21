@@ -3,19 +3,20 @@
 #![forbid(unsafe_code)]
 
 use std::any::type_name;
-use std::cmp::Ordering;
 use std::fmt::Display;
 use std::marker::PhantomData;
 
 use ddd4r_core::domain::AggregateRoot;
-use ddd4r_core::query::{Condition, Operator, Page, Query};
+use ddd4r_core::query::{Page, Query};
 use ddd4r_core::repository::{Repository, RepositoryRow};
 use ddd4r_core::{DddError, DddResult};
-use ddd4r_data::{BackendCapabilities, Capability, DataBackend, DatabaseKind};
+use ddd4r_data::{
+    BackendCapabilities, Capability, DataBackend, DatabaseKind, matching_aggregates,
+    page_aggregates, selected_rows,
+};
 use futures::future::BoxFuture;
 use serde::Serialize;
 use serde::de::DeserializeOwned;
-use serde_json::Value;
 use sqlx::sqlite::SqlitePoolOptions;
 use sqlx::{Sqlite, SqlitePool, Transaction};
 
@@ -133,14 +134,7 @@ where
     }
 
     async fn matching(&self, query: &Query<A>) -> DddResult<Vec<A>> {
-        let mut values = Vec::new();
-        for aggregate in self.all_values().await? {
-            if matches_query(&aggregate, query)? {
-                values.push(aggregate);
-            }
-        }
-        values.sort_by(|left, right| compare_aggregates(left, right, query));
-        Ok(values)
+        matching_aggregates(self.all_values().await?, query)
     }
 }
 
@@ -249,48 +243,15 @@ where
     }
 
     fn find_list<'a>(&'a self, query: &'a Query<A>) -> BoxFuture<'a, DddResult<Vec<A>>> {
-        Box::pin(async move {
-            let values = self.matching(query).await?;
-            Ok(page_slice(values, query).0)
-        })
+        Box::pin(async move { Ok(page_aggregates(self.matching(query).await?, query)?.records) })
     }
 
     fn page<'a>(&'a self, query: &'a Query<A>) -> BoxFuture<'a, DddResult<Page<A>>> {
-        Box::pin(async move {
-            let values = self.matching(query).await?;
-            let total = u64::try_from(values.len()).map_err(|error| DddError::Adapter {
-                adapter: ADAPTER,
-                message: error.to_string(),
-            })?;
-            let (records, size) = page_slice(values, query);
-            Ok(Page {
-                records,
-                total,
-                current: query.page.current,
-                size,
-            })
-        })
+        Box::pin(async move { page_aggregates(self.matching(query).await?, query) })
     }
 
     fn maps<'a>(&'a self, query: &'a Query<A>) -> BoxFuture<'a, DddResult<Vec<RepositoryRow>>> {
-        Box::pin(async move {
-            self.find_list(query)
-                .await?
-                .into_iter()
-                .map(|aggregate| {
-                    let Value::Object(mut row) = serde_json::to_value(aggregate)? else {
-                        return Err(DddError::Adapter {
-                            adapter: ADAPTER,
-                            message: "aggregate must serialize as an object".to_owned(),
-                        });
-                    };
-                    if !query.select_columns.is_empty() {
-                        row.retain(|key, _| query.select_columns.contains(key));
-                    }
-                    Ok(row)
-                })
-                .collect()
-        })
+        Box::pin(async move { selected_rows(self.find_list(query).await?, query) })
     }
 
     fn delete_by_query<'a>(&'a self, query: &'a Query<A>) -> BoxFuture<'a, DddResult<bool>> {
@@ -302,104 +263,6 @@ where
             Ok(!matches.is_empty())
         })
     }
-}
-
-fn matches_query<A>(aggregate: &A, query: &Query<A>) -> DddResult<bool>
-where
-    A: Serialize,
-{
-    let Value::Object(object) = serde_json::to_value(aggregate)? else {
-        return Ok(false);
-    };
-    Ok(query
-        .conditions
-        .iter()
-        .all(|condition| matches_condition(object.get(&condition.property), condition)))
-}
-
-fn matches_condition(value: Option<&Value>, condition: &Condition) -> bool {
-    let first = condition.operands.first();
-    match condition.operator {
-        Operator::Eq => value == first,
-        Operator::Ne => value != first,
-        Operator::Gt => compare_values(value, first) == Ordering::Greater,
-        Operator::Ge => matches!(
-            compare_values(value, first),
-            Ordering::Greater | Ordering::Equal
-        ),
-        Operator::Lt => compare_values(value, first) == Ordering::Less,
-        Operator::Le => matches!(
-            compare_values(value, first),
-            Ordering::Less | Ordering::Equal
-        ),
-        Operator::Like => text(value)
-            .is_some_and(|value| text(first).is_some_and(|operand| value.contains(operand))),
-        Operator::LikeLeft => text(value)
-            .is_some_and(|value| text(first).is_some_and(|operand| value.ends_with(operand))),
-        Operator::LikeRight => text(value)
-            .is_some_and(|value| text(first).is_some_and(|operand| value.starts_with(operand))),
-        Operator::NotLike => !matches_condition(
-            value,
-            &Condition {
-                property: condition.property.clone(),
-                operator: Operator::Like,
-                operands: condition.operands.clone(),
-            },
-        ),
-        Operator::In => value.is_some_and(|value| condition.operands.contains(value)),
-        Operator::NotIn => value.is_none_or(|value| !condition.operands.contains(value)),
-        Operator::IsNull => value.is_none_or(Value::is_null),
-        Operator::IsNotNull => value.is_some_and(|value| !value.is_null()),
-    }
-}
-
-fn compare_aggregates<A>(left: &A, right: &A, query: &Query<A>) -> Ordering
-where
-    A: Serialize,
-{
-    let left = serde_json::to_value(left).unwrap_or(Value::Null);
-    let right = serde_json::to_value(right).unwrap_or(Value::Null);
-    for order in &query.orders {
-        let ordering = compare_values(left.get(&order.property), right.get(&order.property));
-        if ordering != Ordering::Equal {
-            return if order.ascending {
-                ordering
-            } else {
-                ordering.reverse()
-            };
-        }
-    }
-    Ordering::Equal
-}
-
-fn compare_values(left: Option<&Value>, right: Option<&Value>) -> Ordering {
-    match (left, right) {
-        (Some(Value::Number(left)), Some(Value::Number(right))) => left
-            .as_f64()
-            .partial_cmp(&right.as_f64())
-            .unwrap_or(Ordering::Equal),
-        (Some(Value::String(left)), Some(Value::String(right))) => left.cmp(right),
-        (Some(Value::Bool(left)), Some(Value::Bool(right))) => left.cmp(right),
-        (None | Some(Value::Null), None | Some(Value::Null)) => Ordering::Equal,
-        (None | Some(Value::Null), _) => Ordering::Less,
-        (_, None | Some(Value::Null)) => Ordering::Greater,
-        (Some(left), Some(right)) => left.to_string().cmp(&right.to_string()),
-    }
-}
-
-fn text(value: Option<&Value>) -> Option<&str> {
-    value.and_then(Value::as_str)
-}
-
-fn page_slice<A>(values: Vec<A>, query: &Query<A>) -> (Vec<A>, u64) {
-    let Some(size) = query.page.size else {
-        let size = u64::try_from(values.len()).unwrap_or(u64::MAX);
-        return (values, size);
-    };
-    let offset = query.page.current.saturating_sub(1).saturating_mul(size);
-    let offset = usize::try_from(offset).unwrap_or(usize::MAX);
-    let limit = usize::try_from(size).unwrap_or(usize::MAX);
-    (values.into_iter().skip(offset).take(limit).collect(), size)
 }
 
 fn version_to_i64(version: u64) -> DddResult<i64> {

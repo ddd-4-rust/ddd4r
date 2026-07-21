@@ -303,13 +303,13 @@ java_public_types = ["io.ddd4j.data.mybatis.adapter.Ddd4jSqlObservationSink", "i
 java_public_methods = ["io.ddd4j.data.mybatis.adapter.Ddd4jSqlObservationSink#accept", "io.ddd4j.data.mybatis.context.Ddd4jTenantContext#clear", "io.ddd4j.data.mybatis.context.Ddd4jTenantContext#getCurrentTenantId", "io.ddd4j.data.mybatis.context.Ddd4jTenantContext#setCurrentTenantId", "io.ddd4j.data.mybatis.plugins.DataScopeProvider#dataScopeCondition", "io.ddd4j.data.mybatis.plugins.handler.DefaultEncryptedFieldHandler#decrypt", "io.ddd4j.data.mybatis.plugins.handler.DefaultEncryptedFieldHandler#encrypt", "io.ddd4j.data.mybatis.plugins.handler.DefaultEncryptedFieldHandler#hmac", "io.ddd4j.data.mybatis.repository.MybatisAggregateRepository#count", "io.ddd4j.data.mybatis.repository.MybatisAggregateRepository#deleteById", "io.ddd4j.data.mybatis.repository.MybatisAggregateRepository#deleteByIds", "io.ddd4j.data.mybatis.repository.MybatisAggregateRepository#deleteByQuery", "io.ddd4j.data.mybatis.repository.MybatisAggregateRepository#fill", "io.ddd4j.data.mybatis.repository.MybatisAggregateRepository#findAll", "io.ddd4j.data.mybatis.repository.MybatisAggregateRepository#findById", "io.ddd4j.data.mybatis.repository.MybatisAggregateRepository#findByIds", "io.ddd4j.data.mybatis.repository.MybatisAggregateRepository#findFirst", "io.ddd4j.data.mybatis.repository.MybatisAggregateRepository#findList", "io.ddd4j.data.mybatis.repository.MybatisAggregateRepository#insertOrUpdateBatch", "io.ddd4j.data.mybatis.repository.MybatisAggregateRepository#maps", "io.ddd4j.data.mybatis.repository.MybatisAggregateRepository#page", "io.ddd4j.data.mybatis.repository.MybatisAggregateRepository#save", "io.ddd4j.data.mybatis.repository.MybatisAggregateRepository#saveBatch", "io.ddd4j.data.mybatis.repository.MybatisAggregateRepository#toModel", "io.ddd4j.data.mybatis.repository.MybatisAggregateRepository#toPersistenceObject", "io.ddd4j.data.mybatis.repository.MybatisAggregateRepository#update", "io.ddd4j.data.mybatis.repository.MybatisAggregateRepository#updateBatchById"]
 java_dependencies = ["com.github.jsqlparser:jsqlparser", "io.ddd4j:ddd4j-annotation", "io.ddd4j:ddd4j-core", "io.ddd4j:ddd4j-data-crypto", "io.ddd4j:ddd4j-kit", "io.github.hiwepy:mybatis-enhance-annotation", "io.github.hiwepy:mybatis-enhance-core", "io.github.hiwepy:mybatis-enhance-extension", "io.github.hiwepy:mybatis-enhance-typehandler", "org.assertj:assertj-core", "org.junit.jupiter:junit-jupiter", "org.mockito:mockito-core", "org.mybatis:mybatis"]
 java_tests = ["ddd4j-data/ddd4j-data-mybatis/src/test/java/io/ddd4j/data/mybatis/adapter/Ddd4jSqlObservationSinkTest.java"]
-core_behaviors = []
+core_behaviors = ["RBatis CRUD, query, page, optimistic lock, and explicit transaction adapter"]
 rust_package = "ddd4r-data-rbatis"
 rust_path = "modules/data/ddd4r-data-rbatis"
-status = "scaffolded"
-api_evidence = []
-test_evidence = []
-acceptance_evidence = []
+status = "in_progress"
+api_evidence = ["modules/data/ddd4r-data-rbatis/src/lib.rs"]
+test_evidence = ["modules/data/ddd4r-data-rbatis/tests/sqlite_conformance.rs"]
+acceptance_evidence = ["modules/data/ddd4r-data-rbatis/src/lib.rs", "modules/data/ddd4r-data-rbatis/tests/sqlite_conformance.rs"]
 known_semantic_differences = []
 
 [[module]]

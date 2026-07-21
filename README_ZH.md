@@ -18,10 +18,12 @@ Edition 2024 和 Tokio，并以 `MIT OR Apache-2.0` 双许可证发布。
 - 应用级 Cache、TTL、CAS 与统计。
 - Cargo Metadata + `syn` 驱动的 Clean/COLA 架构规则检查。
 - 三后端共享数据契约，以及通过 SQLite 实际执行验证的 `ddd4r-data-sqlx` 纵切。
+- 基于 RBatis 4.9.6/RBDC SQLite 的 `ddd4r-data-rbatis` 纵切与显式事务测试。
 
 SQLx 当前只完成 SQLite 下的 CRUD、批量、条件、排序、分页与乐观锁基线；能力清单中
 逻辑删除、租户、数据权限、审计、Event Sourcing 和事务 Outbox 仍为 `false`，不能作为
-稳定后端发布。RBatis 与 SeaORM 必须分别执行同一套 conformance suite，不能继承 SQLx 的证据。
+稳定后端发布。RBatis 已独立通过同一套基础仓储契约，但缓存、租户、Outbox 等仍未完成；
+SeaORM 也必须独立执行 conformance suite，不能继承 SQLx/RBatis 的证据。
 
 ## 权威入口
 

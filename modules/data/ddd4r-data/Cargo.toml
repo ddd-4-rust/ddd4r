@@ -12,6 +12,7 @@ publish = false
 [dependencies]
 ddd4r-core = { path = "../../../crates/ddd4r-core", version = "=0.1.0-alpha.1" }
 serde.workspace = true
+serde_json.workspace = true
 
 [lints]
 workspace = true
