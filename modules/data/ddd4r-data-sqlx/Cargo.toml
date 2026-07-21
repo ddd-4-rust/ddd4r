@@ -1,6 +1,6 @@
 [package]
-name = "ddd4r-data"
-description = "ddd4r compatibility package for ddd4j-data"
+name = "ddd4r-data-sqlx"
+description = "SQLx data adapter for ddd4r"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -11,7 +11,14 @@ publish = false
 
 [dependencies]
 ddd4r-core = { path = "../../../crates/ddd4r-core", version = "=0.1.0-alpha.1" }
+ddd4r-data = { path = "../ddd4r-data", version = "=0.1.0-alpha.1" }
+futures.workspace = true
 serde.workspace = true
+serde_json.workspace = true
+sqlx.workspace = true
+
+[dev-dependencies]
+tokio.workspace = true
 
 [lints]
 workspace = true

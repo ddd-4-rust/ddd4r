@@ -33,6 +33,7 @@ IN_PROGRESS = {
     "ddd4j-ddd-rules",
     "ddd4j-ddd-rules-clean",
     "ddd4j-ddd-rules-cola",
+    "ddd4j-data",
 }
 
 API_EVIDENCE = {
@@ -48,6 +49,7 @@ API_EVIDENCE = {
     "ddd4j-ddd-rules-cola": [
         "modules/ddd-rules/ddd4r-ddd-rules-cola/src/lib.rs"
     ],
+    "ddd4j-data": ["modules/data/ddd4r-data/src/lib.rs"],
 }
 
 TEST_EVIDENCE = {
@@ -71,6 +73,9 @@ TEST_EVIDENCE = {
     "ddd4j-ddd-rules-cola": [
         "modules/ddd-rules/ddd4r-ddd-rules/tests/architecture_contract.rs"
     ],
+    "ddd4j-data": [
+        "modules/data/ddd4r-data-sqlx/tests/sqlite_conformance.rs"
+    ],
 }
 
 CORE_BEHAVIORS = {
@@ -89,6 +94,9 @@ CORE_BEHAVIORS = {
     "ddd4j-ddd-rules": ["Cargo Metadata and syn architecture conformance engine"],
     "ddd4j-ddd-rules-clean": ["Clean Architecture layer and framework rules"],
     "ddd4j-ddd-rules-cola": ["COLA layer and framework rules"],
+    "ddd4j-data": [
+        "shared backend capability model and executable repository conformance suite"
+    ],
 }
 
 PACKAGE_RE = re.compile(r"^\s*package\s+([\w.]+)\s*;", re.MULTILINE)

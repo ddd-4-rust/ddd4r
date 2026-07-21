@@ -189,13 +189,13 @@ java_public_types = []
 java_public_methods = []
 java_dependencies = []
 java_tests = []
-core_behaviors = []
+core_behaviors = ["shared backend capability model and executable repository conformance suite"]
 rust_package = "ddd4r-data"
 rust_path = "modules/data/ddd4r-data"
-status = "scaffolded"
-api_evidence = []
-test_evidence = []
-acceptance_evidence = []
+status = "in_progress"
+api_evidence = ["modules/data/ddd4r-data/src/lib.rs"]
+test_evidence = ["modules/data/ddd4r-data-sqlx/tests/sqlite_conformance.rs"]
+acceptance_evidence = ["modules/data/ddd4r-data/src/lib.rs", "modules/data/ddd4r-data-sqlx/tests/sqlite_conformance.rs"]
 known_semantic_differences = []
 
 [[module]]
