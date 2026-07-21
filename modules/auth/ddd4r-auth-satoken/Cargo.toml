@@ -10,8 +10,15 @@ repository.workspace = true
 publish = false
 
 [dependencies]
+blake3.workspace = true
 ddd4r-auth = { path = "../ddd4r-auth", version = "=0.1.0-alpha.1" }
 ddd4r-core = { path = "../../../crates/ddd4r-core", version = "=0.1.0-alpha.1" }
+futures.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+time.workspace = true
+uuid.workspace = true
+zeroize.workspace = true
 
 [dev-dependencies]
 ddd4r-auth = { path = "../ddd4r-auth", version = "=0.1.0-alpha.1", features = ["testkit"] }

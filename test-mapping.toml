@@ -29,3 +29,23 @@ required = ["TTL", "CAS", "statistics", "namespace clear"]
 java_area = "event persistence and delivery"
 rust_suite = "ddd4r-outbox unit tests"
 required = ["append", "claim", "publish", "retry", "dead letter"]
+
+[[contract]]
+java_area = "ddd4j Subject, AuthPrincipal and AuthRequest"
+rust_suite = "modules/auth/ddd4r-auth/tests/auth_contract.rs"
+required = ["Tokio task isolation", "cancellation and panic cleanup", "opaque token", "RBAC fail-closed", "timeout", "disable", "concurrent login"]
+
+[[contract]]
+java_area = "ddd4j-auth-satoken"
+rust_suite = "modules/auth/ddd4r-auth-satoken/tests/conformance.rs + utilities.rs"
+required = ["Subject conformance", "temporary token", "API key scopes", "throwaway token", "mixed login", "typed Stp access"]
+
+[[contract]]
+java_area = "ddd4j-auth-security"
+rust_suite = "modules/auth/ddd4r-auth-security/tests/conformance.rs + security_compatibility.rs"
+required = ["Subject conformance", "AuthUserDetails", "credential redaction", "401/403/500 mapping"]
+
+[[contract]]
+java_area = "ddd4j-auth-shiro"
+rust_suite = "modules/auth/ddd4r-auth-shiro/tests/conformance.rs + bridge.rs"
+required = ["Subject conformance", "Realm authentication", "credential redaction", "SessionDAO revocation"]

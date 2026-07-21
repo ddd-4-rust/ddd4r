@@ -6,6 +6,8 @@
   `verify` 成功后才能写入 task-local 上下文。
 - `SessionStore` 在一个写锁临界区内执行 token 唯一性、共享/互斥登录、设备范围替换和最大会话数策略；
   禁用账号会立即撤销已有会话，空权限、空角色、未知 token 和失效 token 全部 fail-closed。
+- 临时 token 与 API Key 存储只保留 keyed BLAKE3 digest；API Key pepper、Security credential hash
+  和 Shiro credential 使用 `Zeroizing` 在最终释放时清零，并从 Debug/序列化输出中剔除。
 - task-local 上下文在 Future 完成、取消或 panic unwind 后由 Tokio scope 回收。
 - Cache key 必须包含 tenant、数据源、驱动和 schema generation。
 - 二级缓存保存数据库/加密态结果，不保存解密后的敏感字段。

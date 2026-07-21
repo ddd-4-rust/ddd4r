@@ -558,9 +558,16 @@ dependencies = [
 name = "ddd4r-auth-satoken"
 version = "0.1.0-alpha.1"
 dependencies = [
+ "blake3",
  "ddd4r-auth",
  "ddd4r-core",
+ "futures",
+ "serde",
+ "serde_json",
+ "time",
  "tokio",
+ "uuid",
+ "zeroize",
 ]
 
 [[package]]
@@ -569,7 +576,10 @@ version = "0.1.0-alpha.1"
 dependencies = [
  "ddd4r-auth",
  "ddd4r-core",
+ "serde",
+ "serde_json",
  "tokio",
+ "zeroize",
 ]
 
 [[package]]
@@ -578,7 +588,9 @@ version = "0.1.0-alpha.1"
 dependencies = [
  "ddd4r-auth",
  "ddd4r-core",
+ "futures",
  "tokio",
+ "zeroize",
 ]
 
 [[package]]

@@ -32,7 +32,7 @@ pub const MODULE: ModuleDescriptor = ModuleDescriptor {
     java_artifact: "ddd4j-auth",
     rust_package: "ddd4r-auth",
     group: "auth",
-    maturity: ModuleMaturity::InProgress,
+    maturity: ModuleMaturity::Complete,
 };
 
 /// Common imports for applications using ddd4r authentication.

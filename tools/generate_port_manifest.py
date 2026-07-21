@@ -36,6 +36,14 @@ IN_PROGRESS = {
     "ddd4j-data",
     "ddd4j-data-jpa",
     "ddd4j-data-mybatis",
+    "ddd4j-data-mybatisplus",
+}
+
+COMPLETE = {
+    "ddd4j-auth",
+    "ddd4j-auth-satoken",
+    "ddd4j-auth-security",
+    "ddd4j-auth-shiro",
 }
 
 API_EVIDENCE = {
@@ -54,6 +62,32 @@ API_EVIDENCE = {
     "ddd4j-data": ["modules/data/ddd4r-data/src/lib.rs"],
     "ddd4j-data-jpa": ["modules/data/ddd4r-data-seaorm/src/lib.rs"],
     "ddd4j-data-mybatis": ["modules/data/ddd4r-data-rbatis/src/lib.rs"],
+    "ddd4j-data-mybatisplus": [
+        "modules/data/ddd4r-data-rbatisplus/src/lib.rs"
+    ],
+    "ddd4j-auth": [
+        "modules/auth/ddd4r-auth/src/model.rs",
+        "modules/auth/ddd4r-auth/src/subject.rs",
+        "modules/auth/ddd4r-auth/src/store.rs",
+        "modules/auth/ddd4r-auth/src/context.rs",
+        "modules/auth/ddd4r-auth/src/provider.rs",
+    ],
+    "ddd4j-auth-satoken": [
+        "modules/auth/ddd4r-auth-satoken/src/lib.rs",
+        "modules/auth/ddd4r-auth-satoken/src/temp_token.rs",
+        "modules/auth/ddd4r-auth-satoken/src/api_key.rs",
+        "modules/auth/ddd4r-auth-satoken/src/handler.rs",
+        "modules/auth/ddd4r-auth-satoken/src/stp.rs",
+    ],
+    "ddd4j-auth-security": [
+        "modules/auth/ddd4r-auth-security/src/lib.rs",
+        "modules/auth/ddd4r-auth-security/src/details.rs",
+        "modules/auth/ddd4r-auth-security/src/exception_handler.rs",
+    ],
+    "ddd4j-auth-shiro": [
+        "modules/auth/ddd4r-auth-shiro/src/lib.rs",
+        "modules/auth/ddd4r-auth-shiro/src/bridge.rs",
+    ],
 }
 
 TEST_EVIDENCE = {
@@ -88,6 +122,25 @@ TEST_EVIDENCE = {
     "ddd4j-data-mybatis": [
         "modules/data/ddd4r-data-rbatis/tests/sqlite_conformance.rs"
     ],
+    "ddd4j-data-mybatisplus": [
+        "modules/data/ddd4r-data-rbatisplus/tests/sqlite_conformance.rs"
+    ],
+    "ddd4j-auth": ["modules/auth/ddd4r-auth/tests/auth_contract.rs"],
+    "ddd4j-auth-satoken": [
+        "modules/auth/ddd4r-auth-satoken/tests/conformance.rs",
+        "modules/auth/ddd4r-auth-satoken/tests/utilities.rs",
+        "modules/auth/ddd4r-auth/src/testkit.rs",
+    ],
+    "ddd4j-auth-security": [
+        "modules/auth/ddd4r-auth-security/tests/conformance.rs",
+        "modules/auth/ddd4r-auth-security/tests/security_compatibility.rs",
+        "modules/auth/ddd4r-auth/src/testkit.rs",
+    ],
+    "ddd4j-auth-shiro": [
+        "modules/auth/ddd4r-auth-shiro/tests/conformance.rs",
+        "modules/auth/ddd4r-auth-shiro/tests/bridge.rs",
+        "modules/auth/ddd4r-auth/src/testkit.rs",
+    ],
 }
 
 CORE_BEHAVIORS = {
@@ -117,6 +170,59 @@ CORE_BEHAVIORS = {
     "ddd4j-data-mybatis": [
         "RBatis CRUD, query, page, optimistic lock, and explicit transaction adapter",
         "transactional aggregate and outbox persistence",
+    ],
+    "ddd4j-data-mybatisplus": [
+        "RBatis repository and transactional outbox delegation",
+        "native RBatis BaseMapper CRUD, transactional insert/update/upsert batches, page, typed QueryWrapper and UpdateWrapper execution",
+        "whole-batch rollback on missing rows and optimistic lock conflicts",
+        "optimistic locking and logical deletion",
+        "RbatisMapper execution wired to SQL rewrite, parameter transform, result verify, result transform and observation stages",
+        "fail-closed secure pipeline assembly with statement-scoped parameter encryption",
+        "AES-256-GCM and authenticated SM4/HMAC-SM3 field envelopes, blind indexes, HMAC row signatures, rotation and partial-row policies",
+    ],
+    "ddd4j-auth": [
+        "object-safe asynchronous Subject and SessionStore contracts",
+        "Tokio task-local session scope and provider registry",
+        "RBAC, bearer verification, expiry, disable, rotation, and concurrency policy",
+    ],
+    "ddd4j-auth-satoken": [
+        "realm-aware Subject provider",
+        "temporary tokens, scoped API keys, mixed login, and typed Stp access",
+    ],
+    "ddd4j-auth-security": [
+        "Security migration Subject provider",
+        "credential-safe user details and stable HTTP error mapping",
+    ],
+    "ddd4j-auth-shiro": [
+        "realm-aware Shiro migration provider",
+        "credential Realm and SessionDAO bridges",
+    ],
+}
+
+SEMANTIC_DIFFERENCES = {
+    "ddd4j-data-mybatisplus": [
+        "The native RBatis mapper is currently verified on SQLite; PostgreSQL, MySQL and SQL Server parity remain incomplete. The frozen ddd4j default SM4 adapter passes null mode, padding, key and IV into a path that cannot produce a stable fixture, so ddd4r defines an authenticated gm1 wire format and requires migration re-encryption instead of claiming byte compatibility."
+    ],
+    "ddd4j-auth": [
+        "Java Object identifiers are canonicalized as AuthId strings with typed parse helpers",
+        "Java ThreadLocal subject binding is replaced by cancellation-safe Tokio SubjectScope",
+        "Default tokens are opaque realm-prefixed UUIDv7 values rather than login IDs",
+    ],
+    "ddd4j-auth-satoken": [
+        "Migration facade does not embed the Java Sa-Token runtime",
+        "Java runtime annotations map to explicit Rust policy values for framework adapters",
+        "StpKit uses generic typed accessors and corrects frozen Java org/info/role claim-key mismatches",
+        "temporary tokens and API keys are stored by keyed digest rather than raw credential",
+    ],
+    "ddd4j-auth-security": [
+        "Migration facade does not embed Spring Security",
+        "Unlike the Java stub, token verification never falls back to the current principal",
+        "Web-specific ResponseEntity construction is delegated to ddd4r web adapters",
+    ],
+    "ddd4j-auth-shiro": [
+        "Migration facade does not embed the Java Apache Shiro runtime",
+        "OS-thread SecurityUtils binding is replaced by Tokio SubjectScope",
+        "token lookup never degrades to the unrelated current principal",
     ],
 }
 
@@ -388,7 +494,12 @@ def render(source: Path, projects: list[ReactorProject]) -> str:
         "",
     ]
     for index, project in enumerate(projects, start=1):
-        status = "in_progress" if project.artifact in IN_PROGRESS else "scaffolded"
+        if project.artifact in COMPLETE:
+            status = "complete"
+        elif project.artifact in IN_PROGRESS:
+            status = "in_progress"
+        else:
+            status = "scaffolded"
         packages, public_types, public_methods = inspect_java_api(source, project)
         api_evidence = API_EVIDENCE.get(project.artifact, [])
         test_evidence = TEST_EVIDENCE.get(project.artifact, [])
@@ -411,7 +522,7 @@ def render(source: Path, projects: list[ReactorProject]) -> str:
                 f"api_evidence = {string_array(api_evidence)}",
                 f"test_evidence = {string_array(test_evidence)}",
                 f"acceptance_evidence = {string_array([*api_evidence, *test_evidence])}",
-                'known_semantic_differences = []',
+                f"known_semantic_differences = {string_array(SEMANTIC_DIFFERENCES.get(project.artifact, []))}",
                 "",
             ]
         )

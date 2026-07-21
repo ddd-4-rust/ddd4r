@@ -670,7 +670,12 @@ fn effective_realm(realm: Option<&str>) -> &str {
 const fn error_code(error: &AuthError) -> &'static str {
     match error {
         AuthError::InvalidLoginId => "invalid_login_id",
+        AuthError::UnknownAccount => "unknown_account",
+        AuthError::BadCredentials => "bad_credentials",
+        AuthError::AccountLocked { .. } => "account_locked",
         AuthError::AccountDisabled { .. } => "account_disabled",
+        AuthError::AccountExpired { .. } => "account_expired",
+        AuthError::CredentialsExpired { .. } => "credentials_expired",
         AuthError::InvalidToken => "invalid_token",
         AuthError::SessionExpired => "session_expired",
         AuthError::NotAuthenticated => "not_authenticated",

@@ -7,6 +7,12 @@ use std::sync::Arc;
 use ddd4r_auth::{Subject, SubjectEngine, SubjectProvider};
 use ddd4r_core::module::{ModuleDescriptor, ModuleMaturity};
 
+mod details;
+mod exception_handler;
+
+pub use details::AuthUserDetails;
+pub use exception_handler::{SecurityErrorResponse, SecurityExceptionHandler};
+
 /// Security-compatible facade with real opaque-session verification.
 #[derive(Debug, Clone)]
 pub struct SecuritySubject {
@@ -59,5 +65,5 @@ pub const MODULE: ModuleDescriptor = ModuleDescriptor {
     java_artifact: "ddd4j-auth-security",
     rust_package: "ddd4r-auth-security",
     group: "auth",
-    maturity: ModuleMaturity::InProgress,
+    maturity: ModuleMaturity::Complete,
 };

@@ -11,9 +11,33 @@ pub enum AuthError {
     /// A login request did not contain a usable identifier.
     #[error("loginId must not be blank")]
     InvalidLoginId,
+    /// No account matched the supplied identity.
+    #[error("unknown account")]
+    UnknownAccount,
+    /// A credential did not match the account.
+    #[error("bad credentials")]
+    BadCredentials,
+    /// An account is administratively locked.
+    #[error("account is locked: {login_id}")]
+    AccountLocked {
+        /// Stable account identifier.
+        login_id: String,
+    },
     /// An account is disabled.
     #[error("account is disabled: {login_id}")]
     AccountDisabled {
+        /// Stable account identifier.
+        login_id: String,
+    },
+    /// An account itself is past its validity window.
+    #[error("account expired: {login_id}")]
+    AccountExpired {
+        /// Stable account identifier.
+        login_id: String,
+    },
+    /// A password or equivalent credential is past its validity window.
+    #[error("credentials expired: {login_id}")]
+    CredentialsExpired {
         /// Stable account identifier.
         login_id: String,
     },

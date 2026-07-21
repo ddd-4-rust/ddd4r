@@ -6,10 +6,10 @@
 
 | Auth 入口 | 当前实现 | 已验证 | 待完成 |
 |---|---|---|---|
-| `ddd4r-auth` | Subject/SessionStore/SubjectScope/RBAC/Bearer | 登录、轮换、退出、超时、禁用、设备和并发策略 | 分布式 SessionStore 后端与 Web 装配 |
-| `ddd4r-auth-satoken` | realm-aware 迁移 Provider | 共享 Subject conformance | 临时令牌、注解 handler、StpKit |
-| `ddd4r-auth-security` | 可撤销 opaque-session Provider | 共享 Subject conformance、无 current-principal 验证降级 | 异常 handler、AuthUserDetails/JWT bridge |
-| `ddd4r-auth-shiro` | realm-aware session Provider | 共享 Subject conformance | credential、SessionDAO 与 native bridge |
+| `ddd4r-auth` | Subject/SessionStore/SubjectScope/RBAC/Bearer | 登录、轮换、退出、超时、禁用、设备和并发策略 | 完成；分布式后端作为独立 adapter 扩展 |
+| `ddd4r-auth-satoken` | realm Provider、临时令牌、API Key、mixed login、StpKit | Subject 与 utilities 契约 | 完成；annotation 映射为显式 policy value |
+| `ddd4r-auth-security` | opaque-session Provider、AuthUserDetails、异常映射 | Subject、凭证脱敏、401/403/500 | 完成；ResponseEntity 构造归 Web adapter |
+| `ddd4r-auth-shiro` | realm Provider、credential Realm、SessionDAO | Subject、鉴权前置、会话撤销 | 完成 |
 
 外部扩展未发布前使用精确 Git revision。任何浮动 branch、未审计 fork 或跨组织源码复制都不进入发布分支。
 

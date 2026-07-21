@@ -12,9 +12,12 @@ publish = false
 [dependencies]
 ddd4r-auth = { path = "../ddd4r-auth", version = "=0.1.0-alpha.1" }
 ddd4r-core = { path = "../../../crates/ddd4r-core", version = "=0.1.0-alpha.1" }
+serde.workspace = true
+zeroize.workspace = true
 
 [dev-dependencies]
 ddd4r-auth = { path = "../ddd4r-auth", version = "=0.1.0-alpha.1", features = ["testkit"] }
+serde_json.workspace = true
 tokio.workspace = true
 
 [lints]
