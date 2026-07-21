@@ -26,7 +26,7 @@ RBatis 本体缺少事务提交回调或逐行流式读取 Hook 时，在 `rbati
 | [`rbatis-memcached`](https://github.com/rbatis-plus/rbatis-memcached) | `d2549b050c7271d0136f4d5d892faa114ffcfcd3` | 一致性哈希、generation、CAS、TTL、大对象限制、超时、健康与指标；真实 Memcached 1.6 容器契约 | alpha 已推送并由 ddd4r 可选 feature 固定依赖 |
 | [`rbatis-r2dbc`](https://github.com/rbatis-plus/rbatis-r2dbc) | `c68d7db6b9fe78a01705635ac900fc71abe67f23` | 强类型 `Stream`、有界预取、取消、Future execute、commit/rollback/Drop 回滚事务作用域 | alpha 已推送并由 ddd4r 可选 feature 固定依赖 |
 | [`rbatis-typehandlers-jsr310`](https://github.com/rbatis-plus/rbatis-typehandlers-jsr310) | `ac285d0b858738776362ff60368ba39638d08926` | time 主模型、Year/YearMonth/MonthDay/Period/ZonedDateTime、UTC 微秒精度、DST fail-closed、chrono/jiff/fastdate | alpha 已推送并由 ddd4r 固定依赖 |
-| [`rbatis-plus`](https://github.com/rbatis-plus/rbatis-plus) | `e553e7d2dd21060a8bf4adb7fa9f43943198a687` | 原生 Mapper CRUD、事务化批量插入/更新/混合 Upsert、分页、Wrapper、乐观锁、逻辑删除；fail-closed `SecurePipelineBuilder`；AES-256-GCM、blind index、行签名、轮换、部分行策略、审计填充 | 真实 SQLite Upsert/整体回滚和安全端到端管线通过；SM4/SM3 和四数据库矩阵待补 |
+| [`rbatis-plus`](https://github.com/rbatis-plus/rbatis-plus) | `b4ceb07ec8d64acaf151ef36621b324083e74a29` | 原生 Mapper CRUD、事务化批量插入/更新/混合 Upsert、分页、Wrapper、乐观锁、逻辑删除；fail-closed `SecurePipelineBuilder`；AES-256-GCM、认证型 SM4/HMAC-SM3、blind index、行签名、轮换、部分行策略、审计填充 | SQLite Upsert/整体回滚和安全端到端管线通过；四数据库矩阵待补 |
 
 所有跨仓库依赖都使用 Git `rev`，没有依赖浮动分支。`ddd4r-data-rbatis` 通过
 `memcached-cache`、`r2dbc` feature 暴露两个兼容入口；全 feature 门禁会编译并测试固定 revision。
@@ -34,3 +34,7 @@ RBatis 本体缺少事务提交回调或逐行流式读取 Hook 时，在 `rbati
 `rbatis-plus` 当前完成原生 Mapper 与安全管线的 alpha 纵切，尚未达到 MyBatis-Plus/Enhance 完整语义；Redis
 Cluster/Sentinel 也尚未取得真实拓扑证据，不能从 Standalone 测试推断完成。RBatis 上游 PR
 合并发布后，需要在同一兼容矩阵变更中切回官方版本。
+
+ddd4j 冻结基线的 `DefaultEncryptedFieldHandler` 将 mode、padding、key 和 IV 作为 `null`
+传给策略，而其缓存键和 Base64 路径不能稳定执行。因此 `gm1` 信封保留 SM4/HMAC-SM3
+算法意图，但不宣称与该失效默认路径逐字节兼容；迁移时必须显式配置密钥并重新加密数据。

@@ -209,7 +209,8 @@ async fn native_mapper_executes_transactional_upsert_and_batch_rollback_contract
 fn security_pipeline_is_reexported_and_fails_closed_on_tampering() {
     use ddd4r_data_rbatisplus::{
         AesGcmKeyRing, FieldCipher, InterceptorStage, PartialRowPolicy, RowSignatureService,
-        RowVerificationConfig, SecurePipelineBuilder, SignatureScope, VerificationOutcome,
+        RowVerificationConfig, SecurePipelineBuilder, SignatureScope, Sm4Sm3KeyMaterial,
+        Sm4Sm3KeyRing, VerificationOutcome,
     };
     use std::collections::BTreeMap;
     use std::sync::Arc;
@@ -286,6 +287,22 @@ fn security_pipeline_is_reexported_and_fails_closed_on_tampering() {
             InterceptorStage::ResultTransform
         ]
     );
+
+    let gm_cipher = Sm4Sm3KeyRing::new(
+        "current",
+        [(
+            "current".to_owned(),
+            Sm4Sm3KeyMaterial::new([3; 16], vec![5; 32], vec![7; 32]).unwrap(),
+        )],
+    )
+    .unwrap();
+    let gm_envelope = gm_cipher.encrypt(b"sensitive", b"orders.secret").unwrap();
+    assert!(gm_envelope.starts_with("gm1.current."));
+    assert_eq!(
+        gm_cipher.decrypt(&gm_envelope, b"orders.secret").unwrap(),
+        b"sensitive"
+    );
+    assert!(gm_cipher.decrypt(&gm_envelope, b"users.secret").is_err());
 }
 
 #[tokio::test]

@@ -37,3 +37,5 @@ let paid = Order::query()
 - Java 注解扫描改为 proc macro 和显式注册。
 - 异步上下文跟随 Tokio task，而不是操作系统线程。
 - ddd4r 首版补充 Unit of Work 和 Transactional Outbox，以闭合聚合保存到事件投递的链路。
+- ddd4j 的默认 SM4 适配器将 mode、padding、key 和 IV 传空，冻结基线无法生成稳定兼容密文；
+  ddd4r 使用认证型 `gm1` SM4/HMAC-SM3 信封，迁移时需要显式配置三类独立密钥并重加密旧数据。

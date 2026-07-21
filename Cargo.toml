@@ -24,7 +24,7 @@ proc-macro2 = "1"
 quote = "1"
 rbatis = { git = "https://github.com/rbatis-plus/rbatis.git", rev = "bc904e9aa78ab44d5d4ff03b13767262c0caffe8" }
 rbatis-memcached = { git = "https://github.com/rbatis-plus/rbatis-memcached.git", rev = "d2549b050c7271d0136f4d5d892faa114ffcfcd3" }
-rbatis-plus = { git = "https://github.com/rbatis-plus/rbatis-plus.git", rev = "e553e7d2dd21060a8bf4adb7fa9f43943198a687" }
+rbatis-plus = { git = "https://github.com/rbatis-plus/rbatis-plus.git", rev = "b4ceb07ec8d64acaf151ef36621b324083e74a29" }
 rbatis-r2dbc = { git = "https://github.com/rbatis-plus/rbatis-r2dbc.git", rev = "c68d7db6b9fe78a01705635ac900fc71abe67f23" }
 rbdc-sqlite = "=4.9.5"
 rbs = "4"

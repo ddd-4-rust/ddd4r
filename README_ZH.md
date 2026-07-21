@@ -33,6 +33,8 @@ Edition 2024 和 Tokio，并以 `MIT OR Apache-2.0` 双许可证发布。
   密钥轮换、`REJECT_PARTIAL`/`DEFERRED_RESIGN` 和审计填充；`RbatisMapper` 已在真实 SQLite
   执行中接通写前变换、SQL 重写、先验签后解密与最终观测；`SecurePipelineBuilder` 固定关键阶段、
   按 statement ID 限定参数加密，并拒绝缺失签名列或解密策略的 fail-open 装配。
+- 国密 Provider 使用 SM4-CBC/PKCS#7、随机 128-bit IV 和 HMAC-SM3 Encrypt-then-MAC，支持
+  上下文绑定、独立 blind-index key 与在线密钥轮换，并通过 SM3/SM4 标准已知答案测试。
 
 三套后端当前都只完成 SQLite 纵切；事务 Outbox 原子写入已为 `Supported`，但 claim、重试
 和死信调度仍由后续持久化 `OutboxStore` 补齐。三套 Repository 统一层面的逻辑删除、租户、
