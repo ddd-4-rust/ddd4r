@@ -51,7 +51,13 @@ API_EVIDENCE = {
     "ddd4j-annotation": ["crates/ddd4r-annotation/src/lib.rs"],
     "ddd4j-core": ["crates/ddd4r-core/src"],
     "ddd4j-kit": ["crates/ddd4r-kit/src/lib.rs"],
-    "ddd4j-cache": ["crates/ddd4r-cache/src/lib.rs"],
+    "ddd4j-cache": [
+        "crates/ddd4r-cache/src/lib.rs",
+        "crates/ddd4r-cache/src/config.rs",
+        "crates/ddd4r-cache/src/model.rs",
+        "crates/ddd4r-cache/src/memory.rs",
+        "crates/ddd4r-cache/src/kit.rs",
+    ],
     "ddd4j-ddd-rules": ["modules/ddd-rules/ddd4r-ddd-rules/src/lib.rs"],
     "ddd4j-ddd-rules-clean": [
         "modules/ddd-rules/ddd4r-ddd-rules-clean/src/lib.rs"
@@ -101,7 +107,7 @@ TEST_EVIDENCE = {
         "crates/ddd4r-outbox/src/lib.rs#tests",
     ],
     "ddd4j-kit": ["crates/ddd4r-kit/src/lib.rs#tests"],
-    "ddd4j-cache": ["crates/ddd4r-cache/src/lib.rs#tests"],
+    "ddd4j-cache": ["crates/ddd4r-cache/tests/cache_contract.rs"],
     "ddd4j-ddd-rules": [
         "modules/ddd-rules/ddd4r-ddd-rules/tests/architecture_contract.rs"
     ],
@@ -155,7 +161,13 @@ CORE_BEHAVIORS = {
         "event sourcing, unit of work, and outbox ports",
     ],
     "ddd4j-kit": ["canonical serialization helpers"],
-    "ddd4j-cache": ["TTL cache, CAS, and statistics"],
+    "ddd4j-cache": [
+        "object-safe async Cache SPI and CacheKit registry facade",
+        "TTL, TTI, persistence, capacity eviction and statistics",
+        "value and version CAS, atomic integer/float counters and stock return codes",
+        "singleflight loading and refresh",
+        "owner-checked expiring lock leases",
+    ],
     "ddd4j-ddd-rules": ["Cargo Metadata and syn architecture conformance engine"],
     "ddd4j-ddd-rules-clean": ["Clean Architecture layer and framework rules"],
     "ddd4j-ddd-rules-cola": ["COLA layer and framework rules"],
@@ -200,6 +212,12 @@ CORE_BEHAVIORS = {
 }
 
 SEMANTIC_DIFFERENCES = {
+    "ddd4j-cache": [
+        "Java Object values are represented as backend-neutral bytes with typed serde JSON helpers",
+        "Java Caffeine, Guava and Hutool migration names share one safe native Rust local implementation",
+        "lock release requires an owner lease token instead of unlocking by key alone",
+        "Redis, Redisson, Memcached and multi-level remote adapters remain incomplete, so this module stays in_progress",
+    ],
     "ddd4j-data-mybatisplus": [
         "The native RBatis mapper is currently verified on SQLite; PostgreSQL, MySQL and SQL Server parity remain incomplete. The frozen ddd4j default SM4 adapter passes null mode, padding, key and IV into a path that cannot produce a stable fixture, so ddd4r defines an authenticated gm1 wire format and requires migration re-encryption instead of claiming byte compatibility."
     ],

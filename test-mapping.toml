@@ -22,8 +22,8 @@ required = ["type routing", "missing executor", "duplicate executor", "typed res
 
 [[contract]]
 java_area = "ddd4j-cache"
-rust_suite = "ddd4r-cache unit tests"
-required = ["TTL", "CAS", "statistics", "namespace clear"]
+rust_suite = "crates/ddd4r-cache/tests/cache_contract.rs"
+required = ["TTL and TTI", "persistence", "capacity eviction", "statistics", "namespace clear", "value and version CAS", "atomic integer and float counters", "stock return codes", "singleflight", "typed JSON", "owner-checked lock lease", "concurrent update isolation"]
 
 [[contract]]
 java_area = "event persistence and delivery"

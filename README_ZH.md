@@ -15,7 +15,8 @@ Edition 2024 和 Tokio，并以 `MIT OR Apache-2.0` 双许可证发布。
 - Tokio task-local 优先、全局 Registry 兜底的上下文查找。
 - Query AST、分页、排序、CommandBus、Projection。
 - `UnitOfWork`、`OutboxStore` 和内存 Outbox 状态机。
-- 应用级 Cache、TTL、CAS 与统计。
+- 应用级 Cache 提供对象安全异步 SPI、统一 `CacheKit`、TTL/TTI、CAS、计数/库存、
+  singleflight、typed JSON、统计和 owner-checked lease 锁；远程适配仍按移植矩阵推进。
 - Cargo Metadata + `syn` 驱动的 Clean/COLA 架构规则检查。
 - Auth 纵切提供对象安全异步 `Subject`/`SessionStore` SPI、UUIDv7 opaque token、Tokio
   task-local 会话上下文、权限/角色检查、Bearer 认证、会话轮换、超时、禁用和并发登录策略；

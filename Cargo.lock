@@ -608,7 +608,9 @@ dependencies = [
  "ddd4r-core",
  "futures",
  "serde",
+ "serde_json",
  "tokio",
+ "uuid",
 ]
 
 [[package]]

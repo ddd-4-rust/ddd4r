@@ -81,8 +81,18 @@ sequenceDiagram
 ```
 
 `ddd4r-auth-satoken`、`ddd4r-auth-security` 和 `ddd4r-auth-shiro` 是 Java 迁移入口名称，
-不表示 Rust 进程内运行对应 JVM 框架。三者通过同一 conformance suite；尚未移植的 Java 专用
-工具和 bridge 记录在 `port-manifest.toml`，完成前模块状态保持 `in_progress`。
+不表示 Rust 进程内运行对应 JVM 框架。三者通过同一 conformance suite；SaTempKit、API Key、
+StpKit、Security details/error handler 与 Shiro Realm/SessionDAO bridge 均已有独立测试证据。
+
+## CacheKit 迁移
+
+Java `CacheKit` 的业务名称映射为 Rust `CacheKey::namespace`。Rust `CacheKit` 注册对象安全的
+异步 `Arc<dyn Cache>`，并提供 raw bytes 与 serde JSON 两种入口。Caffeine、Guava、Hutool 的
+迁移名称统一落到安全的原生本地实现；TTL/TTI、CAS、原子计数、库存返回码和 singleflight 保留。
+
+Java `unlock(biz, key)` 在 Rust 中改为 `unlock(biz, &CacheLockLease)`，只有获取锁时返回的 owner
+token 才能释放锁，租约到期后可以恢复。Redis、Redisson、Memcached 和多级缓存适配尚未完成时，
+不得把 `ddd4j-cache` 标记为 `complete`。
 
 ## 明确差异
 

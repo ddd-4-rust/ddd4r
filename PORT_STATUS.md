@@ -20,7 +20,7 @@
 | Event Sourcing/Mapper | 进行中 | 异步 Repository SPI、历史版本读取、映射契约和乐观版本测试 |
 | UnitOfWork/Outbox | 进行中 | SPI、内存 Outbox claim/publish/retry/dead-letter 状态机 |
 | DDD Rules/Clean/COLA | 进行中 | Cargo Metadata 建图、`syn` 源码引用核验、分层和框架依赖违规测试 |
-| 应用级 Cache | 进行中 | 内存 Cache、TTL、CAS、Stats |
+| 应用级 Cache | 进行中 | 对象安全异步 SPI、CacheKit 注册门面、TTL/TTI/persist、容量淘汰、值与版本 CAS、整数/浮点计数、库存返回码、singleflight、typed JSON、owner lease 锁与并发契约均通过；Redis/Redisson/Memcached/多级缓存适配待补 |
 | 数据后端共享契约 | 进行中 | 三后端独立执行统一 CRUD/query/page/optimistic-lock 与 aggregate/outbox 原子性 conformance suite |
 | SQLx | 进行中 | SQLx 0.9 + SQLite 仓储、显式事务、事务 Outbox 原子提交/回滚已通过；其余数据库和高级能力未完成 |
 | RBatis | 进行中 | RBatis 4.9.6 + 组织内固定 fork `bc904e9a`；RBDC SQLite 仓储、显式事务、事务 Outbox 与原生有界行流已通过；禁止未授权的外部 PR/Issue/评论 |
