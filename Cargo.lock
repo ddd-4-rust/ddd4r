@@ -545,27 +545,40 @@ name = "ddd4r-auth"
 version = "0.1.0-alpha.1"
 dependencies = [
  "ddd4r-core",
+ "futures",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "time",
+ "tokio",
+ "uuid",
 ]
 
 [[package]]
 name = "ddd4r-auth-satoken"
 version = "0.1.0-alpha.1"
 dependencies = [
+ "ddd4r-auth",
  "ddd4r-core",
+ "tokio",
 ]
 
 [[package]]
 name = "ddd4r-auth-security"
 version = "0.1.0-alpha.1"
 dependencies = [
+ "ddd4r-auth",
  "ddd4r-core",
+ "tokio",
 ]
 
 [[package]]
 name = "ddd4r-auth-shiro"
 version = "0.1.0-alpha.1"
 dependencies = [
+ "ddd4r-auth",
  "ddd4r-core",
+ "tokio",
 ]
 
 [[package]]

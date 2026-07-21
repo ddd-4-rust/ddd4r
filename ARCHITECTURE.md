@@ -31,3 +31,20 @@ flowchart LR
     ENGINE --> REPORT["ArchitectureReport<br/>stable rule/package/dependency diagnostics"]
     REPORT --> CI["CI fail/pass"]
 ```
+
+## Auth 运行时边界
+
+```mermaid
+flowchart LR
+    HTTP["Web / MQ transport"] --> SCOPE["Tokio SubjectScope"]
+    SCOPE --> PROVIDER["SubjectProvider<br/>Sa-Token / Security / Shiro migration entry"]
+    PROVIDER --> ENGINE["SubjectEngine<br/>login / verify / RBAC / policy"]
+    ENGINE --> STORE["SessionStore SPI"]
+    ENGINE --> DATA["SubjectDataProvider SPI"]
+    ENGINE --> EVENTS["AuthEventPublisher SPI"]
+    STORE --> MEMORY["InMemorySessionStore<br/>dev / test"]
+    STORE --> EXTERNAL["Distributed adapter<br/>planned"]
+```
+
+所有兼容 Provider 共享状态机和契约测试。凭证只有在验证成功后写入 task-local scope；Future
+正常返回、取消或 panic unwind 时，Tokio scope 负责回收绑定，禁止使用 OS ThreadLocal。

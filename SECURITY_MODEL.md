@@ -2,6 +2,10 @@
 
 - 自有核心代码禁止 `unsafe`。
 - Auth 适配器默认 fail-closed；缓存后端默认 fail-open。
+- Auth 默认签发 realm 前缀的 UUIDv7 opaque token，不使用 login ID 作为凭证；Bearer token 只有在
+  `verify` 成功后才能写入 task-local 上下文。
+- `SessionStore` 在一个写锁临界区内执行 token 唯一性、共享/互斥登录、设备范围替换和最大会话数策略；
+  禁用账号会立即撤销已有会话，空权限、空角色、未知 token 和失效 token 全部 fail-closed。
 - task-local 上下文在 Future 完成、取消或 panic unwind 后由 Tokio scope 回收。
 - Cache key 必须包含 tenant、数据源、驱动和 schema generation。
 - 二级缓存保存数据库/加密态结果，不保存解密后的敏感字段。

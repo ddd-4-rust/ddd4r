@@ -17,6 +17,9 @@ Edition 2024 和 Tokio，并以 `MIT OR Apache-2.0` 双许可证发布。
 - `UnitOfWork`、`OutboxStore` 和内存 Outbox 状态机。
 - 应用级 Cache、TTL、CAS 与统计。
 - Cargo Metadata + `syn` 驱动的 Clean/COLA 架构规则检查。
+- Auth 纵切提供对象安全异步 `Subject`/`SessionStore` SPI、UUIDv7 opaque token、Tokio
+  task-local 会话上下文、权限/角色检查、Bearer 认证、会话轮换、超时、禁用和并发登录策略；
+  Sa-Token、Security、Shiro 三个迁移 Provider 均执行同一份 conformance suite。
 - 三后端共享数据契约，以及分别通过 SQLite 实际执行验证的 SQLx 0.9、RBatis 4.9.6
   和 SeaORM 2.0 纵切。
 - 三个适配器都独立通过 CRUD、批量、条件、排序、分页、乐观锁和显式事务测试。
@@ -40,6 +43,10 @@ Edition 2024 和 Tokio，并以 `MIT OR Apache-2.0` 双许可证发布。
 和死信调度仍由后续持久化 `OutboxStore` 补齐。三套 Repository 统一层面的逻辑删除、租户、
 数据权限、审计和 Event Sourcing 仍为 `Planned`。PostgreSQL、MySQL、SQL Server 及这些高级能力全部通过前，任何
 适配器都不能作为稳定后端发布。
+
+Auth 三个迁移入口当前不运行对应 Java 框架；它们保留 ddd4j 的 Subject 调用语义并共享 Rust
+原生安全状态机。Sa-Token 临时令牌/注解工具、Security 异常 handler、Shiro 原生 credential 和
+SessionDAO bridge 完成前，四个 Auth package 均保持 `in_progress`。
 
 ## 权威入口
 

@@ -26,7 +26,9 @@
 | RBatis | 进行中 | RBatis 4.9.6 + 固定 fork `bc904e9a`；RBDC SQLite 仓储、显式事务、事务 Outbox 与原生有界行流已通过；[上游 PR #623](https://github.com/rbatis/rbatis/pull/623) 待合并 |
 | SeaORM | 进行中 | SeaORM 2.0 + SQLite 仓储、显式事务、事务 Outbox 原子提交/回滚已通过；高级能力未完成 |
 | RBatis 扩展族 | 进行中 | 独立仓库均固定 revision；rbatis-plus 原生 Mapper 已完成事务化批量更新/混合 Upsert、fail-closed 安全装配及认证型 SM4/HMAC-SM3 Provider；SQLite 回滚、安全管线和 Outbox 契约通过；四数据库及 Redis Cluster/Sentinel 拓扑仍未完成 |
+| Auth 核心 | 进行中 | 对象安全异步 `Subject`、可替换 `SessionStore`、Tokio task-local `SubjectScope`、RBAC、Bearer、禁用/超时/轮换和并发登录策略；取消、panic 与并发隔离测试通过 |
+| Sa-Token/Security/Shiro 迁移入口 | 进行中 | 三个 Provider 共享同一状态机并分别通过 conformance suite；Sa-Token 工具/注解、Security handler、Shiro 原生 credential/SessionDAO bridge 尚未完成 |
 | 供应链与发布证据 | 已建立 | `cargo-deny 0.19.4`、`cargo-audit 0.22.2`；84 包 CycloneDX 1.5 聚合 SBOM及官方 CLI schema 校验；tag 构建生成 SHA-256、SLSA provenance 与 SBOM attestation |
-| Web/Auth/MQ/Runtime | 计划中 | 逐模块移植 |
+| Web/MQ/Runtime | 计划中 | 逐模块移植 |
 
 任何没有实现和测试证据的包都不能标记为 `complete`，也不能计入 `1.0.0` 发布门禁。
