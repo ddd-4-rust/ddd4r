@@ -10,6 +10,6 @@
 - Blind index 使用独立 HMAC key；行签名使用 canonical JSON，篡改和未知 key 均 fail-closed。
 - 结果管线固定 `RESULT_VERIFY` 先于 `RESULT_TRANSFORM`，保证先验签再解密。
 - `REJECT_PARTIAL` 拒绝不可验签投影；`DEFERRED_RESIGN` 返回显式延迟补签状态。
-- 当前 SM4/SM3 provider 和 Mapper 自动安装安全拦截器尚未完成，不能宣称国密兼容或默认启用。
+- `RbatisMapper::with_interceptors` 已执行完整前后管线；当前 SM4/SM3 provider 和默认安全装配尚未完成，不能宣称国密兼容或默认启用。
 - 依赖发布执行 `cargo audit`、`cargo deny`、SBOM 和 provenance 检查。
 - 安全问题通过 GitHub Security Advisory 私下报告，不在公开 Issue 中携带利用细节。

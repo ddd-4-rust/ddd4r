@@ -151,3 +151,60 @@ fn security_pipeline_is_reexported_and_fails_closed_on_tampering() {
             .is_err()
     );
 }
+
+#[tokio::test]
+async fn native_mapper_applies_installed_parameter_interceptors() {
+    use ddd4r_data_rbatisplus::{
+        BaseMapper, EncryptedParameter, FieldEncryptionInterceptor, InterceptorChain, RbatisMapper,
+    };
+    use std::sync::Arc;
+
+    let rbatis = RBatis::new();
+    rbatis
+        .link(SqliteDriver {}, "sqlite://:memory:")
+        .await
+        .unwrap();
+    rbatis
+        .exec(
+            "CREATE TABLE plus_orders (id INTEGER PRIMARY KEY, name TEXT NOT NULL, \
+             version INTEGER NOT NULL, deleted INTEGER NOT NULL)",
+            vec![],
+        )
+        .await
+        .unwrap();
+    let cipher = Arc::new(
+        ddd4r_data_rbatisplus::AesGcmKeyRing::new(
+            "current",
+            [("current".to_owned(), [9; 32])],
+            [11; 32],
+        )
+        .unwrap(),
+    );
+    let chain = Arc::new(InterceptorChain::new(vec![Arc::new(
+        FieldEncryptionInterceptor::new(
+            cipher,
+            vec![EncryptedParameter {
+                index: 1,
+                context: b"plus_orders.name".to_vec(),
+            }],
+        ),
+    )]));
+    let mapper = RbatisMapper::<PlusOrderPo, i64>::new(rbatis)
+        .unwrap()
+        .with_interceptors(chain);
+    mapper
+        .insert(PlusOrderPo {
+            id: 9,
+            name: "sensitive".to_owned(),
+            version: 0,
+            deleted: 0,
+        })
+        .await
+        .unwrap();
+    let stored: String = mapper
+        .rbatis()
+        .exec_decode("SELECT name FROM plus_orders WHERE id = 9", vec![])
+        .await
+        .unwrap();
+    assert!(stored.starts_with("v1.current."));
+}

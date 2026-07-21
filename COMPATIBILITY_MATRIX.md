@@ -14,4 +14,4 @@
 | rbatis-memcached | 0.1.0-alpha.1 | `d2549b050c7271d0136f4d5d892faa114ffcfcd3` | 真实 Memcached 1.6 契约通过；一致性哈希、CAS、TTL、generation、健康检查 |
 | rbatis-r2dbc | 0.1.0-alpha.1 | `c68d7db6b9fe78a01705635ac900fc71abe67f23` | 原生行流、强类型解码、有界预取、取消和事务契约通过；依赖 RBatis fork `bc904e9a` |
 | rbatis-typehandlers-jsr310 | 0.1.0-alpha.1 | `ac285d0b858738776362ff60368ba39638d08926` | 全 feature 时间语义与互操作测试通过；ddd4r 已固定依赖 |
-| rbatis-plus | 0.1.0-alpha.1 | `8e32bb9c1e55a6419147fb89659066748540f1c1` | 原生 Mapper、AES-GCM 字段加密、blind index、HMAC 行签名、轮换、部分行策略和审计填充契约通过；SM4/SM3 与自动装配尚未完成 |
+| rbatis-plus | 0.1.0-alpha.1 | `72cc23e07c4fe3676bcd2a88520093652092758a` | 原生 Mapper 已接入 SQL 重写/参数变换/验签/解密/观测阶段，真实 SQLite 安全管线通过；SM4/SM3 与默认安全装配尚未完成 |
