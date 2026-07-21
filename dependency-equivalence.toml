@@ -1,0 +1,71 @@
+manifest_version = 1
+
+[[dependency]]
+java = "JDK CompletableFuture / Reactor"
+rust = ["tokio", "futures"]
+decision = "Tokio is the only supported runtime; public streaming APIs use Future and Stream."
+
+[[dependency]]
+java = "Jackson"
+rust = ["serde", "serde_json", "rmp-serde"]
+decision = "Serde is the serialization SPI; JSON is used for domain fixtures and MessagePack for cache payloads."
+
+[[dependency]]
+java = "Lombok"
+rust = ["ddd4r-annotation", "lombok-macros"]
+decision = "DDD metadata uses owned proc macros; lombok-macros is optional and limited to DTO migration."
+
+[[dependency]]
+java = "MyBatis"
+rust = ["rbatis", "rbdc", "rbs"]
+decision = "RBatis is the primary MyBatis-style adapter."
+
+[[dependency]]
+java = "MyBatis-Plus / mybatis-plus-enhance"
+rust = ["rbatis-plus"]
+decision = "Build a separate full enhancement repository in the rbatis-plus organization."
+
+[[dependency]]
+java = "JPA"
+rust = ["sea-orm"]
+decision = "SeaORM is the object-centric ORM migration adapter."
+
+[[dependency]]
+java = "JDBC / jOOQ-style explicit SQL"
+rust = ["sqlx"]
+decision = "SQLx is a first-class explicit-SQL repository adapter."
+
+[[dependency]]
+java = "Caffeine"
+rust = ["moka"]
+decision = "The compatibility crate keeps the rbatis-caffeine name and uses Moka internally."
+
+[[dependency]]
+java = "Redis client"
+rust = ["redis"]
+decision = "Use redis-rs with generation tokens and optional Pub/Sub invalidation."
+
+[[dependency]]
+java = "Memcached client"
+rust = ["memcache"]
+decision = "Use generation keys and CAS; never depend on key scans."
+
+[[dependency]]
+java = "ArchUnit"
+rust = ["cargo_metadata", "guppy", "syn"]
+decision = "Architecture rules run through cargo xtask and inspect dependency and source graphs."
+
+[[dependency]]
+java = "SLF4J / Micrometer / OpenTelemetry"
+rust = ["tracing", "metrics", "opentelemetry"]
+decision = "Tracing is the common instrumentation facade."
+
+[[dependency]]
+java = "Spring MVC / WebFlux / Javalin / Quarkus"
+rust = ["actix-web", "axum", "salvo"]
+decision = "Compatibility packages share one web conformance suite; they do not emulate Java containers."
+
+[[dependency]]
+java = "Micronaut / Vert.x / Helidon / Dropwizard"
+rust = ["poem", "tokio", "hyper", "rocket"]
+decision = "Each migration entry delegates to an explicit Rust runtime adapter."

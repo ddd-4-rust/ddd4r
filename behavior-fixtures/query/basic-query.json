@@ -1,0 +1,10 @@
+{
+  "aggregate": "Order",
+  "conditions": [
+    {"property": "status", "operator": "eq", "operands": ["PAID"]},
+    {"property": "total", "operator": "gt", "operands": [100]}
+  ],
+  "orders": [{"property": "created_at", "ascending": false}],
+  "page": {"current": 1, "size": 20},
+  "ignoreTenant": false
+}

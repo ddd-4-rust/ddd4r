@@ -1,0 +1,10 @@
+{
+  "aggregateType": "Order",
+  "aggregateId": "ORDER-001",
+  "aggregateVersion": 1,
+  "eventType": "OrderCreated",
+  "eventVersion": 1,
+  "tenantId": "TENANT-A",
+  "supportKeys": ["created"],
+  "payload": {"orderId": "ORDER-001", "total": "128.00"}
+}

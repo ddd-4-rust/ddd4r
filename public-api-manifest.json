@@ -1,0 +1,25 @@
+{
+  "manifestVersion": 1,
+  "source": {
+    "repository": "https://github.com/ddd-4-java/ddd4j",
+    "baselineTag": "ddd4r-port-baseline-2026-07-21"
+  },
+  "coreContracts": [
+    {"java": "DomainModel", "rust": "ddd4r_core::domain::DomainModel", "status": "in_progress"},
+    {"java": "Entity", "rust": "ddd4r_core::domain::Entity", "status": "in_progress"},
+    {"java": "ValueObject", "rust": "ddd4r_core::domain::ValueObject", "status": "in_progress"},
+    {"java": "AggregateRoot", "rust": "ddd4r_core::domain::AggregateRoot", "status": "in_progress"},
+    {"java": "Repository", "rust": "ddd4r_core::repository::Repository", "status": "in_progress"},
+    {"java": "RepositoryRegistry", "rust": "ddd4r_core::repository::RepositoryRegistry", "status": "in_progress"},
+    {"java": "Query", "rust": "ddd4r_core::query::Query", "status": "in_progress"},
+    {"java": "PropertyRef", "rust": "ddd4r_core::query::PropertyRef", "status": "in_progress"},
+    {"java": "DomainEvent", "rust": "ddd4r_core::event::DomainEvent", "status": "in_progress"},
+    {"java": "DomainEventPublisher", "rust": "ddd4r_core::event::DomainEventPublisher", "status": "in_progress"},
+    {"java": "CommandBus", "rust": "ddd4r_core::command::CommandBus", "status": "in_progress"},
+    {"java": "CommandExecutor", "rust": "ddd4r_core::command::CommandExecutor", "status": "in_progress"},
+    {"java": "Projection", "rust": "ddd4r_core::projection::Projection", "status": "in_progress"},
+    {"java": "ReadModel", "rust": "ddd4r_core::projection::ReadModel", "status": "in_progress"},
+    {"java": "new", "rust": "ddd4r_core::uow::UnitOfWork", "status": "in_progress"},
+    {"java": "new", "rust": "ddd4r_core::uow::OutboxStore", "status": "in_progress"}
+  ]
+}

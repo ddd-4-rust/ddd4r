@@ -1,0 +1,31 @@
+manifest_version = 1
+
+[[contract]]
+java_area = "ddd4j-core context and RepositoryRegistry"
+rust_suite = "ddd4r-core/tests/core_contract.rs"
+required = ["task-local precedence", "global fallback", "duplicate rejection", "scope cleanup"]
+
+[[contract]]
+java_area = "AggregateRoot and Query rich methods"
+rust_suite = "ddd4r-core/tests/core_contract.rs"
+required = ["save", "update", "delete", "list", "page", "one", "count", "exists"]
+
+[[contract]]
+java_area = "DomainEvent and DomainEventPublisher"
+rust_suite = "ddd4r-core/tests/core_contract.rs"
+required = ["event envelope", "support keys", "tenant filtering", "task-local publisher"]
+
+[[contract]]
+java_area = "CommandBus and CommandExecutor"
+rust_suite = "ddd4r-core/tests/core_contract.rs"
+required = ["type routing", "missing executor", "duplicate executor", "typed result"]
+
+[[contract]]
+java_area = "ddd4j-cache"
+rust_suite = "ddd4r-cache unit tests"
+required = ["TTL", "CAS", "statistics", "namespace clear"]
+
+[[contract]]
+java_area = "event persistence and delivery"
+rust_suite = "ddd4r-outbox unit tests"
+required = ["append", "claim", "publish", "retry", "dead letter"]

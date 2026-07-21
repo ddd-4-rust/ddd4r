@@ -1,0 +1,19 @@
+[package]
+name = "ddd4r-cache"
+description = "Application-level cache, CAS and statistics contracts for ddd4r"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+dashmap.workspace = true
+ddd4r-core = { path = "../ddd4r-core", version = "=0.1.0-alpha.1" }
+futures.workspace = true
+serde.workspace = true
+tokio.workspace = true
+
+[lints]
+workspace = true
