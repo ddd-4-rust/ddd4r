@@ -29,6 +29,7 @@
 | Auth 核心 | 已完成 | 对象安全异步 `Subject`、可替换 `SessionStore`、Tokio task-local `SubjectScope`、RBAC、Bearer、禁用/超时/轮换和并发登录策略；取消、panic 与并发隔离测试通过 |
 | Sa-Token/Security/Shiro 迁移入口 | 已完成 | 4/4 Auth 映射标记 `complete`；共享 conformance、临时令牌、API Key、mixed login、StpKit、AuthUserDetails、异常映射、Realm 与 SessionDAO 契约全部通过 |
 | 供应链与发布证据 | 已建立 | `cargo-deny 0.19.4`、`cargo-audit 0.22.2`；84 包 CycloneDX 1.5 聚合 SBOM及官方 CLI schema 校验；tag 构建生成 SHA-256、SLSA provenance 与 SBOM attestation |
-| Web/MQ/Runtime | 计划中 | 逐模块移植 |
+| MQ Core/Disruptor | 进行中 | UUIDv7 信封、标准 headers、对象安全 ack/publisher/handler/store、路由与 SQL-92 selector、幂等 claim、at-least-once 重试/DLQ，以及 Tokio 有界本地 Broker 端到端契约通过；其余 Broker 适配器仍为 scaffolded |
+| Web/Runtime | 计划中 | 逐模块移植 |
 
 任何没有实现和测试证据的包都不能标记为 `complete`，也不能计入 `1.0.0` 发布门禁。

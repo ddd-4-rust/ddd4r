@@ -815,6 +815,8 @@ name = "ddd4r-mq"
 version = "0.1.0-alpha.1"
 dependencies = [
  "ddd4r-core",
+ "ddd4r-mq-core",
+ "ddd4r-mq-disruptor",
 ]
 
 [[package]]
@@ -828,14 +830,27 @@ dependencies = [
 name = "ddd4r-mq-core"
 version = "0.1.0-alpha.1"
 dependencies = [
+ "dashmap",
  "ddd4r-core",
+ "futures",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "time",
+ "tokio",
+ "tracing",
+ "uuid",
 ]
 
 [[package]]
 name = "ddd4r-mq-disruptor"
 version = "0.1.0-alpha.1"
 dependencies = [
+ "dashmap",
  "ddd4r-core",
+ "ddd4r-mq-core",
+ "futures",
+ "tokio",
 ]
 
 [[package]]

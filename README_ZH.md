@@ -18,6 +18,9 @@ Edition 2024 和 Tokio，并以 `MIT OR Apache-2.0` 双许可证发布。
 - 应用级 Cache 提供对象安全异步 SPI、统一 `CacheKit`、TTL/TTI、CAS、计数/库存、
   singleflight、typed JSON、统计和 owner-checked lease 锁；远程适配仍按移植矩阵推进。
 - Cargo Metadata + `syn` 驱动的 Clean/COLA 架构规则检查。
+- MQ Core 提供 UUIDv7 信封、标准 headers、路由/tag selector、对象安全 publisher/handler/store/ack、
+  幂等 claim 与 at-least-once 重试/DLQ 状态机；`ddd4r-mq-disruptor` 已完成 Tokio 有界本地
+  Broker 端到端测试，其余 Broker 仍按各自协议实现并保持 scaffolded。
 - Auth 纵切提供对象安全异步 `Subject`/`SessionStore` SPI、UUIDv7 opaque token、Tokio
   task-local 会话上下文、权限/角色检查、Bearer 认证、会话轮换、超时、禁用和并发登录策略；
   Sa-Token、Security、Shiro 三个迁移 Provider 均执行同一份 conformance suite；临时令牌、

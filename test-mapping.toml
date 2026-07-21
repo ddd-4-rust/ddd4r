@@ -49,3 +49,13 @@ required = ["Subject conformance", "AuthUserDetails", "credential redaction", "4
 java_area = "ddd4j-auth-shiro"
 rust_suite = "modules/auth/ddd4r-auth-shiro/tests/conformance.rs + bridge.rs"
 required = ["Subject conformance", "Realm authentication", "credential redaction", "SessionDAO revocation"]
+
+[[contract]]
+java_area = "ddd4j-mq-core"
+rust_suite = "modules/mq/ddd4r-mq-core/tests/mq_contract.rs"
+required = ["BrokerType aliases", "message envelope", "topic resolution", "partition key", "tag matcher", "SQL-92 selector", "exactly-once settlement", "idempotent redelivery", "retry", "dead-letter"]
+
+[[contract]]
+java_area = "ddd4j-mq-disruptor"
+rust_suite = "modules/mq/ddd4r-mq-disruptor/tests/broker_contract.rs"
+required = ["bounded publish", "active subscription", "event support filter", "tag filter", "retry attempts", "dead-letter capture", "lifecycle rejection"]

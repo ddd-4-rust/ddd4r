@@ -11,6 +11,8 @@ publish = false
 
 [dependencies]
 ddd4r-core = { path = "../../../crates/ddd4r-core", version = "=0.1.0-alpha.1" }
+ddd4r-mq-core = { path = "../ddd4r-mq-core", version = "=0.1.0-alpha.1" }
+ddd4r-mq-disruptor = { path = "../ddd4r-mq-disruptor", version = "=0.1.0-alpha.1" }
 
 [lints]
 workspace = true

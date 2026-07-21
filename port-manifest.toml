@@ -341,13 +341,13 @@ java_public_types = []
 java_public_methods = []
 java_dependencies = ["org.junit.jupiter:junit-jupiter"]
 java_tests = []
-core_behaviors = []
+core_behaviors = ["facade exports for core messaging and local bounded broker"]
 rust_package = "ddd4r-mq"
 rust_path = "modules/mq/ddd4r-mq"
-status = "scaffolded"
-api_evidence = []
-test_evidence = []
-acceptance_evidence = []
+status = "in_progress"
+api_evidence = ["modules/mq/ddd4r-mq/src/lib.rs"]
+test_evidence = ["modules/mq/ddd4r-mq-core/tests/mq_contract.rs", "modules/mq/ddd4r-mq-disruptor/tests/broker_contract.rs"]
+acceptance_evidence = ["modules/mq/ddd4r-mq/src/lib.rs", "modules/mq/ddd4r-mq-core/tests/mq_contract.rs", "modules/mq/ddd4r-mq-disruptor/tests/broker_contract.rs"]
 known_semantic_differences = []
 
 [[module]]
@@ -360,14 +360,14 @@ java_public_types = ["io.ddd4j.mq.BrokerType", "io.ddd4j.mq.MQClient", "io.ddd4j
 java_public_methods = ["io.ddd4j.mq.BrokerType#from", "io.ddd4j.mq.BrokerType#toConfigValue", "io.ddd4j.mq.MQClient#close", "io.ddd4j.mq.MQClient#concat", "io.ddd4j.mq.MQClient#consume", "io.ddd4j.mq.MQClient#defaultConcat", "io.ddd4j.mq.MQClient#impl", "io.ddd4j.mq.MQClient#init", "io.ddd4j.mq.MQClient#initConsumer", "io.ddd4j.mq.MQClient#initProducer", "io.ddd4j.mq.MQClient#logger", "io.ddd4j.mq.MQClient#namespace", "io.ddd4j.mq.MQClient#partitionKey", "io.ddd4j.mq.MQClient#properties", "io.ddd4j.mq.MQClient#resolveRouteKey", "io.ddd4j.mq.MQClient#resolveTopic", "io.ddd4j.mq.MQClient#serialization", "io.ddd4j.mq.MQClient#start", "io.ddd4j.mq.MQClient#supportsBrokerTagFilter", "io.ddd4j.mq.MQClient#tagHeaderKey", "io.ddd4j.mq.MQClient#tagsToSelector", "io.ddd4j.mq.MQProperties#namespace", "io.ddd4j.mq.event.MQEvent#broker", "io.ddd4j.mq.event.MQEvent#match", "io.ddd4j.mq.event.MQEvent#publish", "io.ddd4j.mq.event.MQEvent#supports", "io.ddd4j.mq.event.MQEvent#tenantId", "io.ddd4j.mq.event.MQEventSerialization#deserialize", "io.ddd4j.mq.event.MQEventSerialization#serialize", "io.ddd4j.mq.event.MQEventStorer#store", "io.ddd4j.mq.listener.MQListener#getRouteExpression", "io.ddd4j.mq.listener.MQListener#of", "io.ddd4j.mq.listener.MQListener#payloadType", "io.ddd4j.mq.listener.MQListener#supports", "io.ddd4j.mq.message.Acknowledgment#ack", "io.ddd4j.mq.message.Acknowledgment#ackSingle", "io.ddd4j.mq.message.Acknowledgment#brokerType", "io.ddd4j.mq.message.Acknowledgment#correlationId", "io.ddd4j.mq.message.Acknowledgment#deliveryTag", "io.ddd4j.mq.message.Acknowledgment#discard", "io.ddd4j.mq.message.Acknowledgment#isAcknowledged", "io.ddd4j.mq.message.Acknowledgment#isOpen", "io.ddd4j.mq.message.Acknowledgment#messageId", "io.ddd4j.mq.message.Acknowledgment#nack", "io.ddd4j.mq.message.Acknowledgment#recover", "io.ddd4j.mq.message.Acknowledgment#reject", "io.ddd4j.mq.message.Acknowledgment#requeue", "io.ddd4j.mq.message.Acknowledgment#requeueViaRecover", "io.ddd4j.mq.message.Acknowledgment#unwrap", "io.ddd4j.mq.serialization.JsonMQEventSerialization#deserialize", "io.ddd4j.mq.serialization.JsonMQEventSerialization#serialize", "io.ddd4j.mq.util.TagMatcher#findIncludes", "io.ddd4j.mq.util.TagMatcher#match"]
 java_dependencies = ["cn.hutool:hutool-core", "io.ddd4j:ddd4j-core"]
 java_tests = ["ddd4j-mq/ddd4j-mq-core/src/test/java/io/ddd4j/mq/MQClientTagsSelectorTest.java", "ddd4j-mq/ddd4j-mq-core/src/test/java/io/ddd4j/mq/util/TagMatcherTest.java"]
-core_behaviors = []
+core_behaviors = ["UUIDv7 message envelope and stable portable headers", "object-safe asynchronous publisher, handler, persistence and acknowledgment ports", "namespace/topic/tag routing, partition keys and SQL-92 selector translation", "at-least-once consumer engine with idempotency claim, retry and dead-letter disposition"]
 rust_package = "ddd4r-mq-core"
 rust_path = "modules/mq/ddd4r-mq-core"
-status = "scaffolded"
-api_evidence = []
-test_evidence = []
-acceptance_evidence = []
-known_semantic_differences = []
+status = "in_progress"
+api_evidence = ["modules/mq/ddd4r-mq-core/src/lib.rs", "modules/mq/ddd4r-mq-core/src/model.rs", "modules/mq/ddd4r-mq-core/src/acknowledgment.rs", "modules/mq/ddd4r-mq-core/src/consumer.rs", "modules/mq/ddd4r-mq-core/src/idempotency.rs", "modules/mq/ddd4r-mq-core/src/routing.rs", "modules/mq/ddd4r-mq-core/src/port.rs"]
+test_evidence = ["modules/mq/ddd4r-mq-core/tests/mq_contract.rs"]
+acceptance_evidence = ["modules/mq/ddd4r-mq-core/src/lib.rs", "modules/mq/ddd4r-mq-core/src/model.rs", "modules/mq/ddd4r-mq-core/src/acknowledgment.rs", "modules/mq/ddd4r-mq-core/src/consumer.rs", "modules/mq/ddd4r-mq-core/src/idempotency.rs", "modules/mq/ddd4r-mq-core/src/routing.rs", "modules/mq/ddd4r-mq-core/src/port.rs", "modules/mq/ddd4r-mq-core/tests/mq_contract.rs"]
+known_semantic_differences = ["Java reflection listeners map to explicit object-safe MessageHandler implementations", "Java ThreadContext tenant binding maps to immutable tenant metadata on Delivery until runtime request scope integration is completed"]
 
 [[module]]
 index = 20
@@ -398,14 +398,14 @@ java_public_types = ["io.ddd4j.mq.disruptor.DisruptorAcknowledgment", "io.ddd4j.
 java_public_methods = ["io.ddd4j.mq.disruptor.DisruptorAcknowledgment#ack", "io.ddd4j.mq.disruptor.DisruptorAcknowledgment#brokerType", "io.ddd4j.mq.disruptor.DisruptorAcknowledgment#correlationId", "io.ddd4j.mq.disruptor.DisruptorAcknowledgment#deliveryTag", "io.ddd4j.mq.disruptor.DisruptorAcknowledgment#isAcknowledged", "io.ddd4j.mq.disruptor.DisruptorAcknowledgment#isOpen", "io.ddd4j.mq.disruptor.DisruptorAcknowledgment#messageId", "io.ddd4j.mq.disruptor.DisruptorAcknowledgment#nack", "io.ddd4j.mq.disruptor.DisruptorAcknowledgment#recover", "io.ddd4j.mq.disruptor.DisruptorAcknowledgment#reject", "io.ddd4j.mq.disruptor.DisruptorAcknowledgment#unwrap", "io.ddd4j.mq.disruptor.DisruptorMQClient#close", "io.ddd4j.mq.disruptor.DisruptorMQClient#impl", "io.ddd4j.mq.disruptor.DisruptorMQClient#initConsumer", "io.ddd4j.mq.disruptor.DisruptorMQClient#initProducer", "io.ddd4j.mq.disruptor.DisruptorMQClient#start", "io.ddd4j.mq.disruptor.util.WaitStrategys#instance"]
 java_dependencies = ["com.lmax:disruptor", "io.ddd4j:ddd4j-mq-core", "io.github.hiwepy:disruptor-extension", "jakarta.annotation:jakarta.annotation-api"]
 java_tests = []
-core_behaviors = []
+core_behaviors = ["bounded Tokio process-local broker", "dynamic subscriptions, application tag filtering, retry and dead-letter capture"]
 rust_package = "ddd4r-mq-disruptor"
 rust_path = "modules/mq/ddd4r-mq-disruptor"
-status = "scaffolded"
-api_evidence = []
-test_evidence = []
-acceptance_evidence = []
-known_semantic_differences = []
+status = "in_progress"
+api_evidence = ["modules/mq/ddd4r-mq-disruptor/src/lib.rs"]
+test_evidence = ["modules/mq/ddd4r-mq-disruptor/tests/broker_contract.rs"]
+acceptance_evidence = ["modules/mq/ddd4r-mq-disruptor/src/lib.rs", "modules/mq/ddd4r-mq-disruptor/tests/broker_contract.rs"]
+known_semantic_differences = ["LMAX Disruptor maps to a bounded Tokio MPSC dispatch loop while preserving local non-distributed semantics"]
 
 [[module]]
 index = 22

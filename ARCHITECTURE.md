@@ -4,7 +4,7 @@
 [docs/architecture/README.md](./docs/architecture/README.md)。
 
 关键架构决策保存在 [docs/adrs](./docs/adrs)，任何改变模块一一映射、Tokio 运行时、
-Registry 查找顺序、三套正式数据后端或 RBatis 上游策略的变更，都必须同步新增或更新 ADR。
+Registry 查找顺序、三套正式数据后端或 RBatis 外部写操作边界的变更，都必须同步新增或更新 ADR。
 
 ```mermaid
 flowchart LR
@@ -48,3 +48,37 @@ flowchart LR
 
 所有兼容 Provider 共享状态机和契约测试。凭证只有在验证成功后写入 task-local scope；Future
 正常返回、取消或 panic unwind 时，Tokio scope 负责回收绑定，禁止使用 OS ThreadLocal。
+
+## MQ 消费状态机
+
+所有 Broker 适配器必须委托给同一个 `ConsumerEngine`，不能各自重新定义成功、重试和丢弃语义。
+协议层只负责发布、投递与 `Acknowledgment` 命令映射；幂等、次数判断和 DLQ 决策属于核心层。
+
+```mermaid
+sequenceDiagram
+    participant B as Broker Adapter
+    participant E as ConsumerEngine
+    participant I as IdempotencyStore
+    participant S as MessageStore
+    participant H as MessageHandler
+    participant A as Acknowledgment
+
+    B->>E: Delivery(MqEvent, Ack)
+    E->>I: claim(message_id)
+    alt completed duplicate
+        E->>A: ack
+    else acquired
+        E->>S: store(event), audit fail-open
+        E->>H: handle(delivery)
+        alt success
+            E->>I: complete
+            E->>A: ack
+        else retryable and attempts remain
+            E->>I: release
+            E->>A: nack(requeue=true)
+        else terminal
+            E->>I: complete
+            E->>A: nack(requeue=false)
+        end
+    end
+```

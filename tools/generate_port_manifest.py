@@ -37,6 +37,9 @@ IN_PROGRESS = {
     "ddd4j-data-jpa",
     "ddd4j-data-mybatis",
     "ddd4j-data-mybatisplus",
+    "ddd4j-mq",
+    "ddd4j-mq-core",
+    "ddd4j-mq-disruptor",
 }
 
 COMPLETE = {
@@ -94,6 +97,17 @@ API_EVIDENCE = {
         "modules/auth/ddd4r-auth-shiro/src/lib.rs",
         "modules/auth/ddd4r-auth-shiro/src/bridge.rs",
     ],
+    "ddd4j-mq": ["modules/mq/ddd4r-mq/src/lib.rs"],
+    "ddd4j-mq-core": [
+        "modules/mq/ddd4r-mq-core/src/lib.rs",
+        "modules/mq/ddd4r-mq-core/src/model.rs",
+        "modules/mq/ddd4r-mq-core/src/acknowledgment.rs",
+        "modules/mq/ddd4r-mq-core/src/consumer.rs",
+        "modules/mq/ddd4r-mq-core/src/idempotency.rs",
+        "modules/mq/ddd4r-mq-core/src/routing.rs",
+        "modules/mq/ddd4r-mq-core/src/port.rs",
+    ],
+    "ddd4j-mq-disruptor": ["modules/mq/ddd4r-mq-disruptor/src/lib.rs"],
 }
 
 TEST_EVIDENCE = {
@@ -146,6 +160,14 @@ TEST_EVIDENCE = {
         "modules/auth/ddd4r-auth-shiro/tests/conformance.rs",
         "modules/auth/ddd4r-auth-shiro/tests/bridge.rs",
         "modules/auth/ddd4r-auth/src/testkit.rs",
+    ],
+    "ddd4j-mq": [
+        "modules/mq/ddd4r-mq-core/tests/mq_contract.rs",
+        "modules/mq/ddd4r-mq-disruptor/tests/broker_contract.rs",
+    ],
+    "ddd4j-mq-core": ["modules/mq/ddd4r-mq-core/tests/mq_contract.rs"],
+    "ddd4j-mq-disruptor": [
+        "modules/mq/ddd4r-mq-disruptor/tests/broker_contract.rs"
     ],
 }
 
@@ -209,6 +231,17 @@ CORE_BEHAVIORS = {
         "realm-aware Shiro migration provider",
         "credential Realm and SessionDAO bridges",
     ],
+    "ddd4j-mq": ["facade exports for core messaging and local bounded broker"],
+    "ddd4j-mq-core": [
+        "UUIDv7 message envelope and stable portable headers",
+        "object-safe asynchronous publisher, handler, persistence and acknowledgment ports",
+        "namespace/topic/tag routing, partition keys and SQL-92 selector translation",
+        "at-least-once consumer engine with idempotency claim, retry and dead-letter disposition",
+    ],
+    "ddd4j-mq-disruptor": [
+        "bounded Tokio process-local broker",
+        "dynamic subscriptions, application tag filtering, retry and dead-letter capture",
+    ],
 }
 
 SEMANTIC_DIFFERENCES = {
@@ -241,6 +274,13 @@ SEMANTIC_DIFFERENCES = {
         "Migration facade does not embed the Java Apache Shiro runtime",
         "OS-thread SecurityUtils binding is replaced by Tokio SubjectScope",
         "token lookup never degrades to the unrelated current principal",
+    ],
+    "ddd4j-mq-core": [
+        "Java reflection listeners map to explicit object-safe MessageHandler implementations",
+        "Java ThreadContext tenant binding maps to immutable tenant metadata on Delivery until runtime request scope integration is completed",
+    ],
+    "ddd4j-mq-disruptor": [
+        "LMAX Disruptor maps to a bounded Tokio MPSC dispatch loop while preserving local non-distributed semantics",
     ],
 }
 

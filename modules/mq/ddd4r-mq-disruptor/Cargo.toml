@@ -10,7 +10,11 @@ repository.workspace = true
 publish = false
 
 [dependencies]
+dashmap.workspace = true
 ddd4r-core = { path = "../../../crates/ddd4r-core", version = "=0.1.0-alpha.1" }
+ddd4r-mq-core = { path = "../ddd4r-mq-core", version = "=0.1.0-alpha.1" }
+futures.workspace = true
+tokio.workspace = true
 
 [lints]
 workspace = true
