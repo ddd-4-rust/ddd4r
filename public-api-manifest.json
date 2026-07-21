@@ -1,25 +1,555 @@
 {
-  "manifestVersion": 1,
+  "manifestVersion": 2,
   "source": {
     "repository": "https://github.com/ddd-4-java/ddd4j",
+    "commit": "b8bc9547c60b5b49def44e81abf5ba520236fc44",
     "baselineTag": "ddd4r-port-baseline-2026-07-21"
   },
   "coreContracts": [
-    {"java": "DomainModel", "rust": "ddd4r_core::domain::DomainModel", "status": "in_progress"},
-    {"java": "Entity", "rust": "ddd4r_core::domain::Entity", "status": "in_progress"},
-    {"java": "ValueObject", "rust": "ddd4r_core::domain::ValueObject", "status": "in_progress"},
-    {"java": "AggregateRoot", "rust": "ddd4r_core::domain::AggregateRoot", "status": "in_progress"},
-    {"java": "Repository", "rust": "ddd4r_core::repository::Repository", "status": "in_progress"},
-    {"java": "RepositoryRegistry", "rust": "ddd4r_core::repository::RepositoryRegistry", "status": "in_progress"},
-    {"java": "Query", "rust": "ddd4r_core::query::Query", "status": "in_progress"},
-    {"java": "PropertyRef", "rust": "ddd4r_core::query::PropertyRef", "status": "in_progress"},
-    {"java": "DomainEvent", "rust": "ddd4r_core::event::DomainEvent", "status": "in_progress"},
-    {"java": "DomainEventPublisher", "rust": "ddd4r_core::event::DomainEventPublisher", "status": "in_progress"},
-    {"java": "CommandBus", "rust": "ddd4r_core::command::CommandBus", "status": "in_progress"},
-    {"java": "CommandExecutor", "rust": "ddd4r_core::command::CommandExecutor", "status": "in_progress"},
-    {"java": "Projection", "rust": "ddd4r_core::projection::Projection", "status": "in_progress"},
-    {"java": "ReadModel", "rust": "ddd4r_core::projection::ReadModel", "status": "in_progress"},
-    {"java": "new", "rust": "ddd4r_core::uow::UnitOfWork", "status": "in_progress"},
-    {"java": "new", "rust": "ddd4r_core::uow::OutboxStore", "status": "in_progress"}
+    {
+      "mappingKind": "direct_type",
+      "java": "io.ddd4j.core.ddd.model.DomainModel",
+      "javaMethods": [
+        "io.ddd4j.core.ddd.model.DomainModel#id"
+      ],
+      "rust": "ddd4r_core::domain::DomainModel",
+      "status": "in_progress"
+    },
+    {
+      "mappingKind": "direct_type",
+      "java": "io.ddd4j.core.ddd.model.Entity",
+      "javaMethods": [
+        "io.ddd4j.core.ddd.model.Entity#sameIdentityAs"
+      ],
+      "rust": "ddd4r_core::domain::Entity",
+      "status": "in_progress"
+    },
+    {
+      "mappingKind": "direct_type",
+      "java": "io.ddd4j.core.ddd.model.ValueObject",
+      "javaMethods": [],
+      "rust": "ddd4r_core::domain::ValueObject",
+      "status": "in_progress"
+    },
+    {
+      "mappingKind": "direct_type",
+      "java": "io.ddd4j.core.ddd.model.AggregateRoot",
+      "javaMethods": [
+        "io.ddd4j.core.ddd.model.AggregateRoot#clearDomainEvents",
+        "io.ddd4j.core.ddd.model.AggregateRoot#count",
+        "io.ddd4j.core.ddd.model.AggregateRoot#delete",
+        "io.ddd4j.core.ddd.model.AggregateRoot#domainEvents",
+        "io.ddd4j.core.ddd.model.AggregateRoot#exist",
+        "io.ddd4j.core.ddd.model.AggregateRoot#fill",
+        "io.ddd4j.core.ddd.model.AggregateRoot#get",
+        "io.ddd4j.core.ddd.model.AggregateRoot#hasDomainEvents",
+        "io.ddd4j.core.ddd.model.AggregateRoot#list",
+        "io.ddd4j.core.ddd.model.AggregateRoot#one",
+        "io.ddd4j.core.ddd.model.AggregateRoot#page",
+        "io.ddd4j.core.ddd.model.AggregateRoot#pullDomainEvents",
+        "io.ddd4j.core.ddd.model.AggregateRoot#save",
+        "io.ddd4j.core.ddd.model.AggregateRoot#saveOrUpdate",
+        "io.ddd4j.core.ddd.model.AggregateRoot#update"
+      ],
+      "rust": "ddd4r_core::domain::AggregateRoot",
+      "status": "in_progress"
+    },
+    {
+      "mappingKind": "direct_type",
+      "java": "io.ddd4j.core.ddd.model.DomainObjectMapper",
+      "javaMethods": [
+        "io.ddd4j.core.ddd.model.DomainObjectMapper#toModel",
+        "io.ddd4j.core.ddd.model.DomainObjectMapper#toPersistenceObject"
+      ],
+      "rust": "ddd4r_core::mapper::DomainObjectMapper",
+      "status": "in_progress"
+    },
+    {
+      "mappingKind": "direct_type",
+      "java": "io.ddd4j.core.ddd.event.DomainEvent",
+      "javaMethods": [
+        "io.ddd4j.core.ddd.event.DomainEvent#getEventType",
+        "io.ddd4j.core.ddd.event.DomainEvent#publish",
+        "io.ddd4j.core.ddd.event.DomainEvent#result",
+        "io.ddd4j.core.ddd.event.DomainEvent#source",
+        "io.ddd4j.core.ddd.event.DomainEvent#supports",
+        "io.ddd4j.core.ddd.event.DomainEvent#tenantIn"
+      ],
+      "rust": "ddd4r_core::event::DomainEvent",
+      "status": "in_progress"
+    },
+    {
+      "mappingKind": "direct_type",
+      "java": "io.ddd4j.core.ddd.event.DomainEventPublisher",
+      "javaMethods": [
+        "io.ddd4j.core.ddd.event.DomainEventPublisher#publish",
+        "io.ddd4j.core.ddd.event.DomainEventPublisher#publishAll"
+      ],
+      "rust": "ddd4r_core::event::DomainEventPublisher",
+      "status": "in_progress"
+    },
+    {
+      "mappingKind": "direct_type",
+      "java": "io.ddd4j.core.ddd.repository.Repository",
+      "javaMethods": [
+        "io.ddd4j.core.ddd.repository.Repository#count",
+        "io.ddd4j.core.ddd.repository.Repository#delete",
+        "io.ddd4j.core.ddd.repository.Repository#deleteById",
+        "io.ddd4j.core.ddd.repository.Repository#deleteByIds",
+        "io.ddd4j.core.ddd.repository.Repository#deleteByQuery",
+        "io.ddd4j.core.ddd.repository.Repository#exists",
+        "io.ddd4j.core.ddd.repository.Repository#existsById",
+        "io.ddd4j.core.ddd.repository.Repository#fill",
+        "io.ddd4j.core.ddd.repository.Repository#findAll",
+        "io.ddd4j.core.ddd.repository.Repository#findById",
+        "io.ddd4j.core.ddd.repository.Repository#findByIds",
+        "io.ddd4j.core.ddd.repository.Repository#findFirst",
+        "io.ddd4j.core.ddd.repository.Repository#findList",
+        "io.ddd4j.core.ddd.repository.Repository#insertOrUpdate",
+        "io.ddd4j.core.ddd.repository.Repository#insertOrUpdateBatch",
+        "io.ddd4j.core.ddd.repository.Repository#maps",
+        "io.ddd4j.core.ddd.repository.Repository#page",
+        "io.ddd4j.core.ddd.repository.Repository#save",
+        "io.ddd4j.core.ddd.repository.Repository#saveBatch",
+        "io.ddd4j.core.ddd.repository.Repository#update",
+        "io.ddd4j.core.ddd.repository.Repository#updateBatchById",
+        "io.ddd4j.core.ddd.repository.Repository#updateById"
+      ],
+      "rust": "ddd4r_core::repository::Repository",
+      "status": "in_progress"
+    },
+    {
+      "mappingKind": "direct_type",
+      "java": "io.ddd4j.core.ddd.repository.RepositoryRegistry",
+      "javaMethods": [
+        "io.ddd4j.core.ddd.repository.RepositoryRegistry#key",
+        "io.ddd4j.core.ddd.repository.RepositoryRegistry#register",
+        "io.ddd4j.core.ddd.repository.RepositoryRegistry#repository",
+        "io.ddd4j.core.ddd.repository.RepositoryRegistry#repositoryForQuery",
+        "io.ddd4j.core.ddd.repository.RepositoryRegistry#unregister",
+        "io.ddd4j.core.ddd.repository.RepositoryRegistry#unregisterQuery"
+      ],
+      "rust": "ddd4r_core::repository::RepositoryRegistry",
+      "status": "in_progress"
+    },
+    {
+      "mappingKind": "direct_type",
+      "java": "io.ddd4j.core.ddd.repository.EventSourcingRepository",
+      "javaMethods": [
+        "io.ddd4j.core.ddd.repository.EventSourcingRepository#add",
+        "io.ddd4j.core.ddd.repository.EventSourcingRepository#read",
+        "io.ddd4j.core.ddd.repository.EventSourcingRepository#update"
+      ],
+      "rust": "ddd4r_core::event_sourcing::EventSourcingRepository",
+      "status": "in_progress"
+    },
+    {
+      "mappingKind": "direct_type",
+      "java": "io.ddd4j.core.cqrs.command.Command",
+      "javaMethods": [],
+      "rust": "ddd4r_core::command::Command",
+      "status": "in_progress"
+    },
+    {
+      "mappingKind": "direct_type",
+      "java": "io.ddd4j.core.cqrs.command.CommandExecutor",
+      "javaMethods": [
+        "io.ddd4j.core.cqrs.command.CommandExecutor#execute",
+        "io.ddd4j.core.cqrs.command.CommandExecutor#supportedCommands"
+      ],
+      "rust": "ddd4r_core::command::CommandExecutor",
+      "status": "in_progress"
+    },
+    {
+      "mappingKind": "direct_type",
+      "java": "io.ddd4j.core.cqrs.command.CommandBus",
+      "javaMethods": [
+        "io.ddd4j.core.cqrs.command.CommandBus#execute"
+      ],
+      "rust": "ddd4r_core::command::CommandBus",
+      "status": "in_progress"
+    },
+    {
+      "mappingKind": "direct_type",
+      "java": "io.ddd4j.core.cqrs.query.PropertyRef",
+      "javaMethods": [
+        "io.ddd4j.core.cqrs.query.PropertyRef#PropertyRef",
+        "io.ddd4j.core.cqrs.query.PropertyRef#domain",
+        "io.ddd4j.core.cqrs.query.PropertyRef#isDomain",
+        "io.ddd4j.core.cqrs.query.PropertyRef#isPersistence",
+        "io.ddd4j.core.cqrs.query.PropertyRef#persistence",
+        "io.ddd4j.core.cqrs.query.PropertyRef#requireCompatible"
+      ],
+      "rust": "ddd4r_core::query::PropertyRef",
+      "status": "in_progress"
+    },
+    {
+      "mappingKind": "direct_type",
+      "java": "io.ddd4j.core.api.Page",
+      "javaMethods": [
+        "io.ddd4j.core.api.Page#add",
+        "io.ddd4j.core.api.Page#addAll",
+        "io.ddd4j.core.api.Page#contains",
+        "io.ddd4j.core.api.Page#containsAll",
+        "io.ddd4j.core.api.Page#empty",
+        "io.ddd4j.core.api.Page#extras",
+        "io.ddd4j.core.api.Page#forEach",
+        "io.ddd4j.core.api.Page#isEmpty",
+        "io.ddd4j.core.api.Page#iterator",
+        "io.ddd4j.core.api.Page#peek",
+        "io.ddd4j.core.api.Page#remove",
+        "io.ddd4j.core.api.Page#removeAll",
+        "io.ddd4j.core.api.Page#removeIf",
+        "io.ddd4j.core.api.Page#retainAll",
+        "io.ddd4j.core.api.Page#setCurrent",
+        "io.ddd4j.core.api.Page#setRecords",
+        "io.ddd4j.core.api.Page#setSize",
+        "io.ddd4j.core.api.Page#setTotal",
+        "io.ddd4j.core.api.Page#spliterator",
+        "io.ddd4j.core.api.Page#stream",
+        "io.ddd4j.core.api.Page#succeed"
+      ],
+      "rust": "ddd4r_core::query::Page",
+      "status": "in_progress"
+    },
+    {
+      "mappingKind": "direct_type",
+      "java": "io.ddd4j.core.cqrs.readmodel.EventChunk",
+      "javaMethods": [
+        "io.ddd4j.core.cqrs.readmodel.EventChunk#empty",
+        "io.ddd4j.core.cqrs.readmodel.EventChunk#hasEvents"
+      ],
+      "rust": "ddd4r_core::projection::EventChunk",
+      "status": "in_progress"
+    },
+    {
+      "mappingKind": "direct_type",
+      "java": "io.ddd4j.core.cqrs.readmodel.EventChunkReader",
+      "javaMethods": [
+        "io.ddd4j.core.cqrs.readmodel.EventChunkReader#read"
+      ],
+      "rust": "ddd4r_core::projection::EventChunkReader",
+      "status": "in_progress"
+    },
+    {
+      "mappingKind": "direct_type",
+      "java": "io.ddd4j.core.cqrs.readmodel.ProjectionPosition",
+      "javaMethods": [
+        "io.ddd4j.core.cqrs.readmodel.ProjectionPosition#getNextEventNumber",
+        "io.ddd4j.core.cqrs.readmodel.ProjectionPosition#getStreamId",
+        "io.ddd4j.core.cqrs.readmodel.ProjectionPosition#withNextEventNumber"
+      ],
+      "rust": "ddd4r_core::projection::ProjectionPosition",
+      "status": "in_progress"
+    },
+    {
+      "mappingKind": "direct_type",
+      "java": "io.ddd4j.core.cqrs.readmodel.ProjectionPositionRepository",
+      "javaMethods": [
+        "io.ddd4j.core.cqrs.readmodel.ProjectionPositionRepository#deleteByStreamId",
+        "io.ddd4j.core.cqrs.readmodel.ProjectionPositionRepository#findAll",
+        "io.ddd4j.core.cqrs.readmodel.ProjectionPositionRepository#findByStreamId",
+        "io.ddd4j.core.cqrs.readmodel.ProjectionPositionRepository#resetToZero",
+        "io.ddd4j.core.cqrs.readmodel.ProjectionPositionRepository#save"
+      ],
+      "rust": "ddd4r_core::projection::ProjectionPositionRepository",
+      "status": "in_progress"
+    },
+    {
+      "mappingKind": "direct_type",
+      "java": "io.ddd4j.core.cqrs.readmodel.ProjectionService",
+      "javaMethods": [
+        "io.ddd4j.core.cqrs.readmodel.ProjectionService#readProjectionPosition",
+        "io.ddd4j.core.cqrs.readmodel.ProjectionService#resetProjectionPosition",
+        "io.ddd4j.core.cqrs.readmodel.ProjectionService#updateProjectionPosition"
+      ],
+      "rust": "ddd4r_core::projection::ProjectionService",
+      "status": "in_progress"
+    },
+    {
+      "mappingKind": "direct_type",
+      "java": "io.ddd4j.core.cqrs.readmodel.ProjectionRunner",
+      "javaMethods": [
+        "io.ddd4j.core.cqrs.readmodel.ProjectionRunner#runAll",
+        "io.ddd4j.core.cqrs.readmodel.ProjectionRunner#runOnce"
+      ],
+      "rust": "ddd4r_core::projection::ProjectionRunner",
+      "status": "in_progress"
+    },
+    {
+      "mappingKind": "semantic_adapter",
+      "java": null,
+      "javaConcept": "io.ddd4j.core.cqrs.readmodel",
+      "javaMethods": [],
+      "rust": "ddd4r_core::projection::ReadModel",
+      "status": "in_progress",
+      "compatibilityName": "ReadModel"
+    },
+    {
+      "mappingKind": "semantic_adapter",
+      "java": "io.ddd4j.core.cqrs.readmodel.ProjectionView",
+      "javaConcept": "io.ddd4j.core.cqrs.readmodel.ProjectionView",
+      "javaMethods": [
+        "io.ddd4j.core.cqrs.readmodel.ProjectionView#getChunkSize",
+        "io.ddd4j.core.cqrs.readmodel.ProjectionView#getCron",
+        "io.ddd4j.core.cqrs.readmodel.ProjectionView#getEventTypes",
+        "io.ddd4j.core.cqrs.readmodel.ProjectionView#getName",
+        "io.ddd4j.core.cqrs.readmodel.ProjectionView#getStreamId",
+        "io.ddd4j.core.cqrs.readmodel.ProjectionView#handleEvents"
+      ],
+      "rust": "ddd4r_core::projection::Projection",
+      "status": "in_progress",
+      "compatibilityName": "Projection"
+    },
+    {
+      "mappingKind": "semantic_adapter",
+      "java": "io.ddd4j.core.cqrs.query.LambdaCondition",
+      "javaConcept": "io.ddd4j.core.cqrs.query.LambdaCondition",
+      "javaMethods": [
+        "io.ddd4j.core.cqrs.query.LambdaCondition#LambdaCondition",
+        "io.ddd4j.core.cqrs.query.LambdaCondition#asc",
+        "io.ddd4j.core.cqrs.query.LambdaCondition#desc",
+        "io.ddd4j.core.cqrs.query.LambdaCondition#isOrderBy",
+        "io.ddd4j.core.cqrs.query.LambdaCondition#property"
+      ],
+      "rust": "ddd4r_core::query::Condition",
+      "status": "in_progress",
+      "compatibilityName": "Condition"
+    },
+    {
+      "mappingKind": "semantic_adapter",
+      "java": "io.ddd4j.core.cqrs.query.Query",
+      "javaConcept": "io.ddd4j.core.cqrs.query.Query",
+      "javaMethods": [
+        "io.ddd4j.core.cqrs.query.Query#between",
+        "io.ddd4j.core.cqrs.query.Query#count",
+        "io.ddd4j.core.cqrs.query.Query#current",
+        "io.ddd4j.core.cqrs.query.Query#doFills",
+        "io.ddd4j.core.cqrs.query.Query#eq",
+        "io.ddd4j.core.cqrs.query.Query#exist",
+        "io.ddd4j.core.cqrs.query.Query#exists",
+        "io.ddd4j.core.cqrs.query.Query#fill",
+        "io.ddd4j.core.cqrs.query.Query#fills",
+        "io.ddd4j.core.cqrs.query.Query#first",
+        "io.ddd4j.core.cqrs.query.Query#firstOpt",
+        "io.ddd4j.core.cqrs.query.Query#ge",
+        "io.ddd4j.core.cqrs.query.Query#getEndIndex",
+        "io.ddd4j.core.cqrs.query.Query#getGroupByColumns",
+        "io.ddd4j.core.cqrs.query.Query#getOrderByConditions",
+        "io.ddd4j.core.cqrs.query.Query#getSelectColumns",
+        "io.ddd4j.core.cqrs.query.Query#getSetOperations",
+        "io.ddd4j.core.cqrs.query.Query#getStartIndex",
+        "io.ddd4j.core.cqrs.query.Query#getWhereConditions",
+        "io.ddd4j.core.cqrs.query.Query#groupBy",
+        "io.ddd4j.core.cqrs.query.Query#gt",
+        "io.ddd4j.core.cqrs.query.Query#hasConditions",
+        "io.ddd4j.core.cqrs.query.Query#hasGroupBy",
+        "io.ddd4j.core.cqrs.query.Query#hasOrderBy",
+        "io.ddd4j.core.cqrs.query.Query#hasSelect",
+        "io.ddd4j.core.cqrs.query.Query#hasSet",
+        "io.ddd4j.core.cqrs.query.Query#having",
+        "io.ddd4j.core.cqrs.query.Query#ignorePage",
+        "io.ddd4j.core.cqrs.query.Query#ignoreTenantId",
+        "io.ddd4j.core.cqrs.query.Query#in",
+        "io.ddd4j.core.cqrs.query.Query#isNotNull",
+        "io.ddd4j.core.cqrs.query.Query#isNull",
+        "io.ddd4j.core.cqrs.query.Query#le",
+        "io.ddd4j.core.cqrs.query.Query#like",
+        "io.ddd4j.core.cqrs.query.Query#likeLeft",
+        "io.ddd4j.core.cqrs.query.Query#likeRight",
+        "io.ddd4j.core.cqrs.query.Query#list",
+        "io.ddd4j.core.cqrs.query.Query#lt",
+        "io.ddd4j.core.cqrs.query.Query#map",
+        "io.ddd4j.core.cqrs.query.Query#maps",
+        "io.ddd4j.core.cqrs.query.Query#ne",
+        "io.ddd4j.core.cqrs.query.Query#notExist",
+        "io.ddd4j.core.cqrs.query.Query#notIn",
+        "io.ddd4j.core.cqrs.query.Query#notLike",
+        "io.ddd4j.core.cqrs.query.Query#one",
+        "io.ddd4j.core.cqrs.query.Query#oneOpt",
+        "io.ddd4j.core.cqrs.query.Query#orderByAsc",
+        "io.ddd4j.core.cqrs.query.Query#orderByDesc",
+        "io.ddd4j.core.cqrs.query.Query#page",
+        "io.ddd4j.core.cqrs.query.Query#repository",
+        "io.ddd4j.core.cqrs.query.Query#select",
+        "io.ddd4j.core.cqrs.query.Query#set",
+        "io.ddd4j.core.cqrs.query.Query#size",
+        "io.ddd4j.core.cqrs.query.Query#with",
+        "io.ddd4j.core.cqrs.query.Query#withPO"
+      ],
+      "rust": "ddd4r_core::query::Operator",
+      "status": "in_progress",
+      "compatibilityName": "Operator"
+    },
+    {
+      "mappingKind": "semantic_adapter",
+      "java": "io.ddd4j.core.cqrs.query.Query",
+      "javaConcept": "io.ddd4j.core.cqrs.query.Query",
+      "javaMethods": [
+        "io.ddd4j.core.cqrs.query.Query#between",
+        "io.ddd4j.core.cqrs.query.Query#count",
+        "io.ddd4j.core.cqrs.query.Query#current",
+        "io.ddd4j.core.cqrs.query.Query#doFills",
+        "io.ddd4j.core.cqrs.query.Query#eq",
+        "io.ddd4j.core.cqrs.query.Query#exist",
+        "io.ddd4j.core.cqrs.query.Query#exists",
+        "io.ddd4j.core.cqrs.query.Query#fill",
+        "io.ddd4j.core.cqrs.query.Query#fills",
+        "io.ddd4j.core.cqrs.query.Query#first",
+        "io.ddd4j.core.cqrs.query.Query#firstOpt",
+        "io.ddd4j.core.cqrs.query.Query#ge",
+        "io.ddd4j.core.cqrs.query.Query#getEndIndex",
+        "io.ddd4j.core.cqrs.query.Query#getGroupByColumns",
+        "io.ddd4j.core.cqrs.query.Query#getOrderByConditions",
+        "io.ddd4j.core.cqrs.query.Query#getSelectColumns",
+        "io.ddd4j.core.cqrs.query.Query#getSetOperations",
+        "io.ddd4j.core.cqrs.query.Query#getStartIndex",
+        "io.ddd4j.core.cqrs.query.Query#getWhereConditions",
+        "io.ddd4j.core.cqrs.query.Query#groupBy",
+        "io.ddd4j.core.cqrs.query.Query#gt",
+        "io.ddd4j.core.cqrs.query.Query#hasConditions",
+        "io.ddd4j.core.cqrs.query.Query#hasGroupBy",
+        "io.ddd4j.core.cqrs.query.Query#hasOrderBy",
+        "io.ddd4j.core.cqrs.query.Query#hasSelect",
+        "io.ddd4j.core.cqrs.query.Query#hasSet",
+        "io.ddd4j.core.cqrs.query.Query#having",
+        "io.ddd4j.core.cqrs.query.Query#ignorePage",
+        "io.ddd4j.core.cqrs.query.Query#ignoreTenantId",
+        "io.ddd4j.core.cqrs.query.Query#in",
+        "io.ddd4j.core.cqrs.query.Query#isNotNull",
+        "io.ddd4j.core.cqrs.query.Query#isNull",
+        "io.ddd4j.core.cqrs.query.Query#le",
+        "io.ddd4j.core.cqrs.query.Query#like",
+        "io.ddd4j.core.cqrs.query.Query#likeLeft",
+        "io.ddd4j.core.cqrs.query.Query#likeRight",
+        "io.ddd4j.core.cqrs.query.Query#list",
+        "io.ddd4j.core.cqrs.query.Query#lt",
+        "io.ddd4j.core.cqrs.query.Query#map",
+        "io.ddd4j.core.cqrs.query.Query#maps",
+        "io.ddd4j.core.cqrs.query.Query#ne",
+        "io.ddd4j.core.cqrs.query.Query#notExist",
+        "io.ddd4j.core.cqrs.query.Query#notIn",
+        "io.ddd4j.core.cqrs.query.Query#notLike",
+        "io.ddd4j.core.cqrs.query.Query#one",
+        "io.ddd4j.core.cqrs.query.Query#oneOpt",
+        "io.ddd4j.core.cqrs.query.Query#orderByAsc",
+        "io.ddd4j.core.cqrs.query.Query#orderByDesc",
+        "io.ddd4j.core.cqrs.query.Query#page",
+        "io.ddd4j.core.cqrs.query.Query#repository",
+        "io.ddd4j.core.cqrs.query.Query#select",
+        "io.ddd4j.core.cqrs.query.Query#set",
+        "io.ddd4j.core.cqrs.query.Query#size",
+        "io.ddd4j.core.cqrs.query.Query#with",
+        "io.ddd4j.core.cqrs.query.Query#withPO"
+      ],
+      "rust": "ddd4r_core::query::Order",
+      "status": "in_progress",
+      "compatibilityName": "Order"
+    },
+    {
+      "mappingKind": "semantic_adapter",
+      "java": "io.ddd4j.core.cqrs.query.Query",
+      "javaConcept": "io.ddd4j.core.cqrs.query.Query",
+      "javaMethods": [
+        "io.ddd4j.core.cqrs.query.Query#between",
+        "io.ddd4j.core.cqrs.query.Query#count",
+        "io.ddd4j.core.cqrs.query.Query#current",
+        "io.ddd4j.core.cqrs.query.Query#doFills",
+        "io.ddd4j.core.cqrs.query.Query#eq",
+        "io.ddd4j.core.cqrs.query.Query#exist",
+        "io.ddd4j.core.cqrs.query.Query#exists",
+        "io.ddd4j.core.cqrs.query.Query#fill",
+        "io.ddd4j.core.cqrs.query.Query#fills",
+        "io.ddd4j.core.cqrs.query.Query#first",
+        "io.ddd4j.core.cqrs.query.Query#firstOpt",
+        "io.ddd4j.core.cqrs.query.Query#ge",
+        "io.ddd4j.core.cqrs.query.Query#getEndIndex",
+        "io.ddd4j.core.cqrs.query.Query#getGroupByColumns",
+        "io.ddd4j.core.cqrs.query.Query#getOrderByConditions",
+        "io.ddd4j.core.cqrs.query.Query#getSelectColumns",
+        "io.ddd4j.core.cqrs.query.Query#getSetOperations",
+        "io.ddd4j.core.cqrs.query.Query#getStartIndex",
+        "io.ddd4j.core.cqrs.query.Query#getWhereConditions",
+        "io.ddd4j.core.cqrs.query.Query#groupBy",
+        "io.ddd4j.core.cqrs.query.Query#gt",
+        "io.ddd4j.core.cqrs.query.Query#hasConditions",
+        "io.ddd4j.core.cqrs.query.Query#hasGroupBy",
+        "io.ddd4j.core.cqrs.query.Query#hasOrderBy",
+        "io.ddd4j.core.cqrs.query.Query#hasSelect",
+        "io.ddd4j.core.cqrs.query.Query#hasSet",
+        "io.ddd4j.core.cqrs.query.Query#having",
+        "io.ddd4j.core.cqrs.query.Query#ignorePage",
+        "io.ddd4j.core.cqrs.query.Query#ignoreTenantId",
+        "io.ddd4j.core.cqrs.query.Query#in",
+        "io.ddd4j.core.cqrs.query.Query#isNotNull",
+        "io.ddd4j.core.cqrs.query.Query#isNull",
+        "io.ddd4j.core.cqrs.query.Query#le",
+        "io.ddd4j.core.cqrs.query.Query#like",
+        "io.ddd4j.core.cqrs.query.Query#likeLeft",
+        "io.ddd4j.core.cqrs.query.Query#likeRight",
+        "io.ddd4j.core.cqrs.query.Query#list",
+        "io.ddd4j.core.cqrs.query.Query#lt",
+        "io.ddd4j.core.cqrs.query.Query#map",
+        "io.ddd4j.core.cqrs.query.Query#maps",
+        "io.ddd4j.core.cqrs.query.Query#ne",
+        "io.ddd4j.core.cqrs.query.Query#notExist",
+        "io.ddd4j.core.cqrs.query.Query#notIn",
+        "io.ddd4j.core.cqrs.query.Query#notLike",
+        "io.ddd4j.core.cqrs.query.Query#one",
+        "io.ddd4j.core.cqrs.query.Query#oneOpt",
+        "io.ddd4j.core.cqrs.query.Query#orderByAsc",
+        "io.ddd4j.core.cqrs.query.Query#orderByDesc",
+        "io.ddd4j.core.cqrs.query.Query#page",
+        "io.ddd4j.core.cqrs.query.Query#repository",
+        "io.ddd4j.core.cqrs.query.Query#select",
+        "io.ddd4j.core.cqrs.query.Query#set",
+        "io.ddd4j.core.cqrs.query.Query#size",
+        "io.ddd4j.core.cqrs.query.Query#with",
+        "io.ddd4j.core.cqrs.query.Query#withPO"
+      ],
+      "rust": "ddd4r_core::query::PageRequest",
+      "status": "in_progress",
+      "compatibilityName": "PageRequest"
+    },
+    {
+      "mappingKind": "rust_native_extension",
+      "java": null,
+      "javaMethods": [],
+      "rust": "ddd4r_core::runtime::RuntimeRegistry",
+      "status": "rust_native_extension",
+      "compatibilityName": "RuntimeRegistry"
+    },
+    {
+      "mappingKind": "rust_native_extension",
+      "java": null,
+      "javaMethods": [],
+      "rust": "ddd4r_core::context::ContextScope",
+      "status": "rust_native_extension",
+      "compatibilityName": "ContextScope"
+    },
+    {
+      "mappingKind": "rust_native_extension",
+      "java": null,
+      "javaMethods": [],
+      "rust": "ddd4r_core::uow::UnitOfWork",
+      "status": "rust_native_extension",
+      "compatibilityName": "UnitOfWork"
+    },
+    {
+      "mappingKind": "rust_native_extension",
+      "java": null,
+      "javaMethods": [],
+      "rust": "ddd4r_core::uow::OutboxStore",
+      "status": "rust_native_extension",
+      "compatibilityName": "OutboxStore"
+    }
+  ],
+  "evidence": [
+    "crates/ddd4r-core/src",
+    "crates/ddd4r-core/tests/context_scope_contract.rs",
+    "crates/ddd4r-core/tests/core_contract.rs",
+    "crates/ddd4r-core/tests/port_contract.rs",
+    "crates/ddd4r-core/tests/projection_contract.rs",
+    "crates/ddd4r-outbox/src/lib.rs#tests"
   ]
 }

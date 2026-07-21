@@ -3,18 +3,23 @@
 权威机器清单为 [`port-manifest.toml`](./port-manifest.toml)，由
 [`tools/generate_port_manifest.py`](./tools/generate_port_manifest.py) 从 ddd4j Reactor 生成。
 
-当前阶段：`0.1.0-alpha.1`。
+当前版本：`0.1.0-alpha.1`。Phase 0 与 Phase 1 已完成，Phase 2 正在实现；
+状态只按当前仓库中的可执行代码和测试证据计算。
 
 | 能力 | 状态 | 当前证据 |
 |---|---|---|
-| 82 项 Reactor 清单 | 已建立 | manifest 固定校验数量为 82 |
-| Rust workspace/toolchain | 已建立 | Rust 1.97.1、Edition 2024 |
+| ddd4j 冻结基线 | 已完成 | `ddd4r-port-baseline-2026-07-21` → `b8bc9547c60b5b49def44e81abf5ba520236fc44`；82/82 Reactor 测试成功 |
+| 82 项 Reactor 清单 | 已完成 | 82 个唯一映射；1,297 个公开类型、4,591 个公开方法、550 个直接依赖、135 个 Java 测试 |
+| Rust workspace/toolchain | 已完成 | 83 packages；Rust 1.97.1、Edition 2024、Tokio；GitHub `ddd-4-rust/ddd4r` |
+| API 审计清单 | 已建立 | 31 个核心契约，区分直接类型、语义适配和 Rust 原生扩展；CI 强制校验 |
 | DomainModel/Entity/ValueObject | 进行中 | 核心 traits 和 derive macros |
-| AggregateRoot Active Record 门面 | 进行中 | save/update/delete/query 契约测试 |
-| Context/Repository Registry | 进行中 | task-local 优先和全局兜底测试 |
-| Query AST/CQRS | 进行中 | Query rich methods、CommandBus |
+| AggregateRoot Active Record 门面 | 进行中 | save/update/delete/query/batch/fill 契约测试 |
+| Context/Repository/Runtime Registry | 进行中 | task-local 优先、全局兜底、嵌套/取消/panic/并发隔离测试 |
+| Query AST/CQRS | 进行中 | 强类型 Condition/Order/Page、CommandBus、ProjectionRunner |
 | Event Envelope/Publisher | 进行中 | UUIDv7 信封和 task-local publisher |
-| UnitOfWork/Outbox | 进行中 | SPI 和内存 Outbox 状态机 |
+| Event Sourcing/Mapper | 进行中 | 异步 Repository SPI、历史版本读取、映射契约和乐观版本测试 |
+| UnitOfWork/Outbox | 进行中 | SPI、内存 Outbox claim/publish/retry/dead-letter 状态机 |
+| DDD Rules/Clean/COLA | 进行中 | Cargo Metadata 建图、`syn` 源码引用核验、分层和框架依赖违规测试 |
 | 应用级 Cache | 进行中 | 内存 Cache、TTL、CAS、Stats |
 | RBatis/SQLx/SeaORM | 计划中 | 尚未计入完成 |
 | RBatis 扩展族 | 计划中 | 归属 rbatis-plus 组织 |

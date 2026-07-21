@@ -10,7 +10,12 @@ repository.workspace = true
 publish = false
 
 [dependencies]
+cargo_metadata.workspace = true
 ddd4r-core = { path = "../../../crates/ddd4r-core", version = "=0.1.0-alpha.1" }
+serde.workspace = true
+serde_json.workspace = true
+syn.workspace = true
+thiserror.workspace = true
 
 [lints]
 workspace = true

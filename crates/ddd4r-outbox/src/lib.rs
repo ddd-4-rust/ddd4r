@@ -37,7 +37,7 @@ impl OutboxStore for InMemoryOutboxStore {
             let mut records = self.records.lock().await;
             for event in events {
                 let record = OutboxRecord::pending(event.clone());
-                records.insert(record.id, record);
+                records.entry(record.id).or_insert(record);
             }
             Ok(())
         })
@@ -54,10 +54,12 @@ impl OutboxStore for InMemoryOutboxStore {
             let ids = records
                 .iter()
                 .filter(|(_, record)| {
-                    record.status == OutboxStatus::Pending
-                        && record
-                            .next_attempt_at
-                            .is_none_or(|retry_at| retry_at <= now)
+                    matches!(
+                        record.status,
+                        OutboxStatus::Pending | OutboxStatus::Publishing
+                    ) && record
+                        .next_attempt_at
+                        .is_none_or(|ready_at| ready_at <= now)
                 })
                 .map(|(id, _)| *id)
                 .take(limit)
@@ -136,9 +138,11 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn claim_publish_and_retry_are_explicit() {
+    async fn append_is_idempotent_and_publish_is_explicit() {
         let store = InMemoryOutboxStore::new();
-        store.append(&[event()]).await.unwrap();
+        let event = event();
+        store.append(&[event.clone(), event]).await.unwrap();
+        assert_eq!(store.records().await.len(), 1);
         let claimed = store
             .claim(10, OffsetDateTime::now_utc() + Duration::minutes(1))
             .await
@@ -146,5 +150,41 @@ mod tests {
         assert_eq!(claimed.len(), 1);
         store.mark_published(claimed[0].id).await.unwrap();
         assert_eq!(store.records().await[0].status, OutboxStatus::Published);
+    }
+
+    #[tokio::test]
+    async fn expired_leases_are_recovered_and_failures_retry_or_dead_letter() {
+        let store = InMemoryOutboxStore::new();
+        store.append(&[event()]).await.unwrap();
+        let first = store
+            .claim(1, OffsetDateTime::now_utc() - Duration::seconds(1))
+            .await
+            .unwrap();
+        let recovered = store
+            .claim(1, OffsetDateTime::now_utc() + Duration::minutes(1))
+            .await
+            .unwrap();
+        assert_eq!(recovered[0].id, first[0].id);
+
+        store
+            .mark_failed(
+                recovered[0].id,
+                Some(OffsetDateTime::now_utc() - Duration::seconds(1)),
+                "temporary",
+            )
+            .await
+            .unwrap();
+        let retried = store
+            .claim(1, OffsetDateTime::now_utc() + Duration::minutes(1))
+            .await
+            .unwrap();
+        store
+            .mark_failed(retried[0].id, None, "exhausted")
+            .await
+            .unwrap();
+        let record = &store.records().await[0];
+        assert_eq!(record.status, OutboxStatus::DeadLetter);
+        assert_eq!(record.attempts, 2);
+        assert_eq!(record.last_error.as_deref(), Some("exhausted"));
     }
 }

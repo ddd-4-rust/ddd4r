@@ -13,3 +13,21 @@ flowchart LR
     CORE --> PORTS["UnitOfWork / Outbox / Cache / MQ"]
     PORTS --> ADAPTERS["RBatis / SQLx / SeaORM / Broker"]
 ```
+
+## 架构规则执行链
+
+`ddd4r-ddd-rules` 不依赖目录名做静态猜测后直接放行。Cargo Metadata 提供真实的
+workspace/package/dependency 图，`syn` 再确认源码实际引用；Clean 与 COLA 包只负责选择
+策略并输出稳定、可序列化的违规结果。
+
+```mermaid
+flowchart LR
+    MANIFEST["Cargo.toml"] --> META["Cargo Metadata<br/>package + dependency graph"]
+    SOURCE["src/**/*.rs"] --> SYN["syn AST<br/>actual crate references"]
+    META --> ENGINE["ddd4r-ddd-rules<br/>policy engine"]
+    SYN --> ENGINE
+    CLEAN["Clean policy"] --> ENGINE
+    COLA["COLA policy"] --> ENGINE
+    ENGINE --> REPORT["ArchitectureReport<br/>stable rule/package/dependency diagnostics"]
+    REPORT --> CI["CI fail/pass"]
+```

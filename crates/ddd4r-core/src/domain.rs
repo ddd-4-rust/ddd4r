@@ -61,4 +61,14 @@ pub trait AggregateRoot: Entity + Sized {
     fn pull_events(&mut self) -> Vec<EventEnvelope> {
         std::mem::take(self.recorded_events_mut())
     }
+
+    /// Removes all buffered events without returning them.
+    fn clear_events(&mut self) {
+        self.recorded_events_mut().clear();
+    }
+
+    /// Returns whether this aggregate has uncommitted domain events.
+    fn has_recorded_events(&self) -> bool {
+        !self.recorded_events().is_empty()
+    }
 }

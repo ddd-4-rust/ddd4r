@@ -1,0 +1,10 @@
+[package]
+name = "shop-application"
+version = "0.0.0"
+edition = "2024"
+
+[package.metadata.ddd4r]
+layer = "application"
+
+[dependencies]
+shop-infrastructure = { path = "../infrastructure" }

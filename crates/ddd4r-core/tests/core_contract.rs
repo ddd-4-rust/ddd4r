@@ -9,7 +9,7 @@ use ddd4r_core::domain::{AggregateRoot, DomainModel, Entity};
 use ddd4r_core::event::{
     DOMAIN_EVENT_PUBLISHER_KEY, DomainEvent, DomainEventExt, DomainEventPublisher, EventEnvelope,
 };
-use ddd4r_core::query::{Page, Query};
+use ddd4r_core::query::{Operator, Page, PropertyRef, Query};
 use ddd4r_core::repository::{AggregateRootExt, Repository, RepositoryRegistry};
 use ddd4r_core::{DddError, DddResult};
 use futures::future::BoxFuture;
@@ -109,6 +109,10 @@ impl Repository<Order> for InMemoryOrderRepository {
         Box::pin(async move { Ok(self.values.lock().unwrap().values().cloned().collect()) })
     }
 
+    fn find_all(&self) -> BoxFuture<'_, DddResult<Vec<Order>>> {
+        Box::pin(async move { Ok(self.values.lock().unwrap().values().cloned().collect()) })
+    }
+
     fn find_first<'a>(
         &'a self,
         _query: &'a Query<Order>,
@@ -181,6 +185,62 @@ async fn task_repository_overrides_global_without_leaking() {
     let mut global = Order::new("O-3", "created");
     global.save().await.unwrap();
     assert_eq!(global.name, "global:created");
+    RepositoryRegistry::unregister::<Order>().unwrap();
+}
+
+#[tokio::test]
+async fn repository_bulk_and_query_ast_cover_ddd4j_rich_contract() {
+    const NAME: PropertyRef<Order, String> = PropertyRef::new("name");
+
+    let _guard = REPOSITORY_TEST_LOCK.lock().await;
+    let _ = RepositoryRegistry::unregister::<Order>();
+    RepositoryRegistry::register::<Order>(Arc::new(InMemoryOrderRepository::labelled("bulk")))
+        .unwrap();
+
+    let repository = RepositoryRegistry::repository::<Order>().unwrap();
+    let mut orders = [Order::new("B-1", "first"), Order::new("B-2", "second")];
+    repository.save_batch(&mut orders).await.unwrap();
+    assert_eq!(repository.count_all().await.unwrap(), 2);
+    assert!(repository.exists_by_id(&String::from("B-1")).await.unwrap());
+    assert_eq!(
+        repository
+            .find_by_ids(&[String::from("B-2"), String::from("missing")])
+            .await
+            .unwrap()
+            .len(),
+        1
+    );
+
+    let query = Query::<Order>::new()
+        .and(NAME.like(String::from("first")).unwrap())
+        .and_if(false, NAME.eq(String::from("ignored")).unwrap())
+        .set(NAME.eq(String::from("renamed")).unwrap())
+        .select(["id", "name"])
+        .group_by(["name"])
+        .having("count(*) > 0")
+        .fills(["buyer"])
+        .ignoring_tenant();
+    assert_eq!(query.conditions[0].operator, Operator::Like);
+    assert_eq!(query.set_operations.len(), 1);
+    assert_eq!(query.select_columns, ["id", "name"]);
+    assert_eq!(query.group_by_columns, ["name"]);
+    assert!(query.has_fill("buyer"));
+    assert!(query.ignore_tenant);
+    assert!(matches!(
+        query.maps().await,
+        Err(DddError::UnsupportedOperation {
+            operation: "Repository::maps"
+        })
+    ));
+
+    assert_eq!(
+        repository
+            .delete_by_ids(&[String::from("B-1"), String::from("B-2")])
+            .await
+            .unwrap(),
+        2
+    );
+    assert!(!repository.exists_all().await.unwrap());
     RepositoryRegistry::unregister::<Order>().unwrap();
 }
 

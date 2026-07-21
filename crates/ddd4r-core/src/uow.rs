@@ -56,7 +56,7 @@ impl OutboxRecord {
     /// Creates a pending outbox record.
     pub fn pending(event: EventEnvelope) -> Self {
         Self {
-            id: Uuid::now_v7(),
+            id: event.event_id,
             event,
             status: OutboxStatus::Pending,
             attempts: 0,

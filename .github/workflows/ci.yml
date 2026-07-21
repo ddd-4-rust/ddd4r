@@ -18,7 +18,9 @@ jobs:
           toolchain: 1.97.1
           components: rustfmt, clippy
       - name: Verify 82-project migration manifest
-        run: python3 tools/verify_port_manifest.py
+        run: |
+          python3 tools/verify_port_manifest.py
+          python3 tools/verify_public_api_manifest.py
       - name: Format
         run: cargo fmt --all --check
       - name: Clippy
