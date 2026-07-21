@@ -477,6 +477,7 @@ dependencies = [
  "ddd4r-data",
  "futures",
  "rbatis",
+ "rbatis-typehandlers-jsr310",
  "rbdc-sqlite",
  "rbs",
  "serde",
@@ -1915,6 +1916,16 @@ dependencies = [
  "quote",
  "rbatis-codegen",
  "syn 2.0.119",
+]
+
+[[package]]
+name = "rbatis-typehandlers-jsr310"
+version = "0.1.0-alpha.1"
+source = "git+https://github.com/rbatis-plus/rbatis-typehandlers-jsr310.git?rev=ac285d0b858738776362ff60368ba39638d08926#ac285d0b858738776362ff60368ba39638d08926"
+dependencies = [
+ "serde",
+ "thiserror",
+ "time",
 ]
 
 [[package]]

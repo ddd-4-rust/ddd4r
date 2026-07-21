@@ -11,3 +11,4 @@
 | rbatis-cache-core | 0.1.0-alpha.1 | `8028de4ceee63d98cf7f5ef4695ba59d0c4656e6` | SPI 与契约测试通过 |
 | rbatis-caffeine | 0.1.0-alpha.1 | `34921f2c79c10bf1237fce767bda9af18368bb5f` | Moka 后端测试通过 |
 | rbatis-redis | 0.1.0-alpha.1 | `761e4d1b77b651b15eb50556333b8fdf1c84fe2d` | Standalone Redis 8.4 集成测试通过；Cluster/Sentinel 拓扑待验证 |
+| rbatis-typehandlers-jsr310 | 0.1.0-alpha.1 | `ac285d0b858738776362ff60368ba39638d08926` | 全 feature 时间语义与互操作测试通过；ddd4r 已固定依赖 |

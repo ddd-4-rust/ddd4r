@@ -25,7 +25,7 @@
 | SQLx | 进行中 | SQLx 0.9 + SQLite 仓储、显式事务、事务 Outbox 原子提交/回滚已通过；其余数据库和高级能力未完成 |
 | RBatis | 进行中 | RBatis 4.9.6 + RBDC SQLite 仓储、显式事务、事务 Outbox 原子提交/回滚已通过；高级能力未完成 |
 | SeaORM | 进行中 | SeaORM 2.0 + SQLite 仓储、显式事务、事务 Outbox 原子提交/回滚已通过；高级能力未完成 |
-| RBatis 扩展族 | 进行中 | `rbatis-cache-core@8028de4`、`rbatis-caffeine@34921f2`、`rbatis-redis@761e4d1` 已独立建仓并推送；Redis Standalone 真实测试通过，Cluster/Sentinel 与其余扩展未完成 |
+| RBatis 扩展族 | 进行中 | cache-core、caffeine、redis、typehandlers-jsr310 已独立建仓并固定 revision；Redis Standalone 与时间全 feature 测试通过，Cluster/Sentinel 与其余扩展未完成 |
 | Web/Auth/MQ/Runtime | 计划中 | 逐模块移植 |
 
 任何没有实现和测试证据的包都不能标记为 `complete`，也不能计入 `1.0.0` 发布门禁。

@@ -23,6 +23,9 @@ use rbs::Value;
 use serde::Serialize;
 use serde::de::DeserializeOwned;
 
+/// JSR-310 migration types pinned from the `rbatis-plus` extension ecosystem.
+pub use rbatis_typehandlers_jsr310 as time_types;
+
 const ADAPTER: &str = "rbatis-sqlite";
 
 /// Machine-readable migration descriptor.
