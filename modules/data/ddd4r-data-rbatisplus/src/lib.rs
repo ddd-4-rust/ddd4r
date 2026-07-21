@@ -1,8 +1,8 @@
 //! `ddd4j-data-mybatisplus` compatibility adapter.
 //!
-//! The first executable vertical slice combines the proven `RBatis` repository
-//! and transaction implementation with the independently versioned
-//! `rbatis-plus` mapper, service, wrapper, metadata, and interceptor APIs.
+//! The executable vertical slice combines the proven `RBatis` repository and
+//! transaction implementation with the independently versioned `rbatis-plus`
+//! native mapper, service, wrapper, metadata, and interceptor APIs.
 
 #![forbid(unsafe_code)]
 

@@ -541,7 +541,10 @@ dependencies = [
  "ddd4r-core",
  "ddd4r-data",
  "ddd4r-data-rbatis",
+ "rbatis",
  "rbatis-plus",
+ "rbdc-sqlite",
+ "serde",
  "tokio",
 ]
 
@@ -2053,7 +2056,7 @@ dependencies = [
 [[package]]
 name = "rbatis-plus"
 version = "0.1.0-alpha.1"
-source = "git+https://github.com/rbatis-plus/rbatis-plus.git?rev=786ef8a19637ff148817bc62f1e35a0cea768982#786ef8a19637ff148817bc62f1e35a0cea768982"
+source = "git+https://github.com/rbatis-plus/rbatis-plus.git?rev=c531a597e83e06d897b93b3ea3982a8da52c7dd2#c531a597e83e06d897b93b3ea3982a8da52c7dd2"
 dependencies = [
  "rbatis-plus-core",
  "rbatis-plus-extension",
@@ -2063,7 +2066,7 @@ dependencies = [
 [[package]]
 name = "rbatis-plus-core"
 version = "0.1.0-alpha.1"
-source = "git+https://github.com/rbatis-plus/rbatis-plus.git?rev=786ef8a19637ff148817bc62f1e35a0cea768982#786ef8a19637ff148817bc62f1e35a0cea768982"
+source = "git+https://github.com/rbatis-plus/rbatis-plus.git?rev=c531a597e83e06d897b93b3ea3982a8da52c7dd2#c531a597e83e06d897b93b3ea3982a8da52c7dd2"
 dependencies = [
  "futures",
  "serde",
@@ -2074,17 +2077,20 @@ dependencies = [
 [[package]]
 name = "rbatis-plus-extension"
 version = "0.1.0-alpha.1"
-source = "git+https://github.com/rbatis-plus/rbatis-plus.git?rev=786ef8a19637ff148817bc62f1e35a0cea768982#786ef8a19637ff148817bc62f1e35a0cea768982"
+source = "git+https://github.com/rbatis-plus/rbatis-plus.git?rev=c531a597e83e06d897b93b3ea3982a8da52c7dd2#c531a597e83e06d897b93b3ea3982a8da52c7dd2"
 dependencies = [
  "futures",
+ "rbatis",
  "rbatis-plus-core",
+ "rbs",
+ "serde",
  "serde_json",
 ]
 
 [[package]]
 name = "rbatis-plus-macros"
 version = "0.1.0-alpha.1"
-source = "git+https://github.com/rbatis-plus/rbatis-plus.git?rev=786ef8a19637ff148817bc62f1e35a0cea768982#786ef8a19637ff148817bc62f1e35a0cea768982"
+source = "git+https://github.com/rbatis-plus/rbatis-plus.git?rev=c531a597e83e06d897b93b3ea3982a8da52c7dd2#c531a597e83e06d897b93b3ea3982a8da52c7dd2"
 dependencies = [
  "proc-macro2",
  "quote",

@@ -26,11 +26,11 @@ RBatis 本体缺少事务提交回调或逐行流式读取 Hook 时，在 `rbati
 | [`rbatis-memcached`](https://github.com/rbatis-plus/rbatis-memcached) | `d2549b050c7271d0136f4d5d892faa114ffcfcd3` | 一致性哈希、generation、CAS、TTL、大对象限制、超时、健康与指标；真实 Memcached 1.6 容器契约 | alpha 已推送并由 ddd4r 可选 feature 固定依赖 |
 | [`rbatis-r2dbc`](https://github.com/rbatis-plus/rbatis-r2dbc) | `c68d7db6b9fe78a01705635ac900fc71abe67f23` | 强类型 `Stream`、有界预取、取消、Future execute、commit/rollback/Drop 回滚事务作用域 | alpha 已推送并由 ddd4r 可选 feature 固定依赖 |
 | [`rbatis-typehandlers-jsr310`](https://github.com/rbatis-plus/rbatis-typehandlers-jsr310) | `ac285d0b858738776362ff60368ba39638d08926` | time 主模型、Year/YearMonth/MonthDay/Period/ZonedDateTime、UTC 微秒精度、DST fail-closed、chrono/jiff/fastdate | alpha 已推送并由 ddd4r 固定依赖 |
-| [`rbatis-plus`](https://github.com/rbatis-plus/rbatis-plus) | `786ef8a19637ff148817bc62f1e35a0cea768982` | 五 crate workspace、BaseMapper/IService/ServiceImpl、强类型 Wrapper、PlusModel derive、代码生成、租户/数据权限/SQL observation 与固定六阶段链 | alpha 纵切已推送；高级插件与原生 RBatis Mapper 执行待补 |
+| [`rbatis-plus`](https://github.com/rbatis-plus/rbatis-plus) | `c531a597e83e06d897b93b3ea3982a8da52c7dd2` | 五 crate workspace、原生 RBatis Mapper CRUD/批量/分页、强类型 Query/Update Wrapper、乐观锁、逻辑删除、可重导出 PlusModel derive、租户/数据权限/SQL observation 与固定六阶段链 | SQLite 契约已通过；高级插件与四数据库矩阵待补 |
 
 所有跨仓库依赖都使用 Git `rev`，没有依赖浮动分支。`ddd4r-data-rbatis` 通过
 `memcached-cache`、`r2dbc` feature 暴露两个兼容入口；全 feature 门禁会编译并测试固定 revision。
 
-`rbatis-plus` 当前只完成可执行 alpha 纵切，尚未达到 MyBatis-Plus/Enhance 完整语义；Redis
+`rbatis-plus` 当前完成原生 Mapper 的 SQLite alpha 纵切，尚未达到 MyBatis-Plus/Enhance 完整语义；Redis
 Cluster/Sentinel 也尚未取得真实拓扑证据，不能从 Standalone 测试推断完成。RBatis 上游 PR
 合并发布后，需要在同一兼容矩阵变更中切回官方版本。

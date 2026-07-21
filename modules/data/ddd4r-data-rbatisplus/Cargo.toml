@@ -16,6 +16,9 @@ rbatis-plus.workspace = true
 
 [dev-dependencies]
 ddd4r-data = { path = "../ddd4r-data", version = "=0.1.0-alpha.1" }
+rbatis.workspace = true
+rbdc-sqlite.workspace = true
+serde.workspace = true
 tokio.workspace = true
 
 [lints]
