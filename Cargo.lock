@@ -539,6 +539,10 @@ name = "ddd4r-data-rbatisplus"
 version = "0.1.0-alpha.1"
 dependencies = [
  "ddd4r-core",
+ "ddd4r-data",
+ "ddd4r-data-rbatis",
+ "rbatis-plus",
+ "tokio",
 ]
 
 [[package]]
@@ -2044,6 +2048,47 @@ dependencies = [
  "memcache",
  "rbatis-cache-core",
  "tokio",
+]
+
+[[package]]
+name = "rbatis-plus"
+version = "0.1.0-alpha.1"
+source = "git+https://github.com/rbatis-plus/rbatis-plus.git?rev=786ef8a19637ff148817bc62f1e35a0cea768982#786ef8a19637ff148817bc62f1e35a0cea768982"
+dependencies = [
+ "rbatis-plus-core",
+ "rbatis-plus-extension",
+ "rbatis-plus-macros",
+]
+
+[[package]]
+name = "rbatis-plus-core"
+version = "0.1.0-alpha.1"
+source = "git+https://github.com/rbatis-plus/rbatis-plus.git?rev=786ef8a19637ff148817bc62f1e35a0cea768982#786ef8a19637ff148817bc62f1e35a0cea768982"
+dependencies = [
+ "futures",
+ "serde",
+ "serde_json",
+ "thiserror",
+]
+
+[[package]]
+name = "rbatis-plus-extension"
+version = "0.1.0-alpha.1"
+source = "git+https://github.com/rbatis-plus/rbatis-plus.git?rev=786ef8a19637ff148817bc62f1e35a0cea768982#786ef8a19637ff148817bc62f1e35a0cea768982"
+dependencies = [
+ "futures",
+ "rbatis-plus-core",
+ "serde_json",
+]
+
+[[package]]
+name = "rbatis-plus-macros"
+version = "0.1.0-alpha.1"
+source = "git+https://github.com/rbatis-plus/rbatis-plus.git?rev=786ef8a19637ff148817bc62f1e35a0cea768982#786ef8a19637ff148817bc62f1e35a0cea768982"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.119",
 ]
 
 [[package]]

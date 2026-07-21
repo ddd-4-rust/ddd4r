@@ -11,6 +11,12 @@ publish = false
 
 [dependencies]
 ddd4r-core = { path = "../../../crates/ddd4r-core", version = "=0.1.0-alpha.1" }
+ddd4r-data-rbatis = { path = "../ddd4r-data-rbatis", version = "=0.1.0-alpha.1" }
+rbatis-plus.workspace = true
+
+[dev-dependencies]
+ddd4r-data = { path = "../ddd4r-data", version = "=0.1.0-alpha.1" }
+tokio.workspace = true
 
 [lints]
 workspace = true
