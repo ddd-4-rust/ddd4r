@@ -20,10 +20,13 @@ Edition 2024 和 Tokio，并以 `MIT OR Apache-2.0` 双许可证发布。
 - 三后端共享数据契约，以及分别通过 SQLite 实际执行验证的 SQLx 0.9、RBatis 4.9.6
   和 SeaORM 2.0 纵切。
 - 三个适配器都独立通过 CRUD、批量、条件、排序、分页、乐观锁和显式事务测试。
+- `TransactionalEventRepository` 保证聚合与事件信封同库原子提交；重复事件导致写入失败时，
+  聚合更新回滚、事件缓冲保留，三后端执行同一份原子性测试。
 
-三套后端当前都只完成 SQLite 下的基础纵切；能力清单中逻辑删除、租户、数据权限、审计、
-Event Sourcing 和事务 Outbox 仍为 `Planned`。PostgreSQL、MySQL、SQL Server 及这些高级
-能力全部通过前，任何适配器都不能作为稳定后端发布。
+三套后端当前都只完成 SQLite 纵切；事务 Outbox 原子写入已为 `Supported`，但 claim、重试
+和死信调度仍由后续持久化 `OutboxStore` 补齐。逻辑删除、租户、数据权限、审计和 Event
+Sourcing 仍为 `Planned`。PostgreSQL、MySQL、SQL Server 及这些高级能力全部通过前，任何
+适配器都不能作为稳定后端发布。
 
 ## 权威入口
 

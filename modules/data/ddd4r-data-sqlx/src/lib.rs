@@ -11,8 +11,8 @@ use ddd4r_core::query::{Page, Query};
 use ddd4r_core::repository::{Repository, RepositoryRow};
 use ddd4r_core::{DddError, DddResult};
 use ddd4r_data::{
-    BackendCapabilities, Capability, DataBackend, DatabaseKind, matching_aggregates,
-    page_aggregates, selected_rows,
+    BackendCapabilities, Capability, DataBackend, DatabaseKind, TransactionalEventRepository,
+    matching_aggregates, page_aggregates, selected_rows,
 };
 use futures::future::BoxFuture;
 use serde::Serialize;
@@ -43,7 +43,7 @@ impl DataBackend for SqlxBackend {
             optimistic_lock: Capability::Supported,
             logical_delete: Capability::Planned,
             unit_of_work: Capability::Supported,
-            transactional_outbox: Capability::Planned,
+            transactional_outbox: Capability::Supported,
             tenant_isolation: Capability::Planned,
             data_scope: Capability::Planned,
             audit_fill: Capability::Planned,
@@ -72,6 +72,15 @@ where
              aggregate_type TEXT NOT NULL, aggregate_id TEXT NOT NULL, \
              version INTEGER NOT NULL, payload TEXT NOT NULL, \
              PRIMARY KEY (aggregate_type, aggregate_id))",
+        )
+        .execute(&pool)
+        .await
+        .map_err(|error| adapter_error(&error))?;
+        sqlx::query(
+            "CREATE TABLE IF NOT EXISTS ddd4r_outbox (\
+             event_id TEXT PRIMARY KEY, aggregate_type TEXT NOT NULL, \
+             aggregate_id TEXT NOT NULL, aggregate_version INTEGER NOT NULL, \
+             event_type TEXT NOT NULL, envelope TEXT NOT NULL, status TEXT NOT NULL)",
         )
         .execute(&pool)
         .await
@@ -135,6 +144,125 @@ where
 
     async fn matching(&self, query: &Query<A>) -> DddResult<Vec<A>> {
         matching_aggregates(self.all_values().await?, query)
+    }
+}
+
+impl<A> TransactionalEventRepository<A> for SqlxRepository<A>
+where
+    A: AggregateRoot + Serialize + DeserializeOwned,
+    A::Id: Display,
+{
+    fn save_with_outbox<'a>(&'a self, aggregate: &'a mut A) -> BoxFuture<'a, DddResult<()>> {
+        Box::pin(async move {
+            let expected = aggregate.version();
+            let events = aggregate.recorded_events().to_vec();
+            let mut tx = self.begin().await?;
+            let result: DddResult<()> = async {
+                let actual = sqlx::query_scalar::<_, i64>(
+                    "SELECT version FROM ddd4r_aggregate \
+                     WHERE aggregate_type = ? AND aggregate_id = ?",
+                )
+                .bind(self.aggregate_type)
+                .bind(aggregate.id().to_string())
+                .fetch_optional(&mut *tx)
+                .await
+                .map_err(|error| adapter_error(&error))?
+                .map(version_from_i64)
+                .transpose()?;
+                if actual.is_some_and(|actual| actual != expected)
+                    || (actual.is_none() && expected != 0)
+                {
+                    return Err(DddError::OptimisticLockConflict {
+                        aggregate: type_name::<A>(),
+                        expected,
+                        actual: actual.unwrap_or(0),
+                    });
+                }
+                let next = expected.saturating_add(1);
+                aggregate.set_version(next);
+                let payload = serde_json::to_string(aggregate)?;
+                let affected = if actual.is_none() {
+                    sqlx::query(
+                        "INSERT INTO ddd4r_aggregate \
+                         (aggregate_type, aggregate_id, version, payload) VALUES (?, ?, ?, ?)",
+                    )
+                    .bind(self.aggregate_type)
+                    .bind(aggregate.id().to_string())
+                    .bind(version_to_i64(next)?)
+                    .bind(payload)
+                    .execute(&mut *tx)
+                    .await
+                } else {
+                    sqlx::query(
+                        "UPDATE ddd4r_aggregate SET version = ?, payload = ? \
+                         WHERE aggregate_type = ? AND aggregate_id = ? AND version = ?",
+                    )
+                    .bind(version_to_i64(next)?)
+                    .bind(payload)
+                    .bind(self.aggregate_type)
+                    .bind(aggregate.id().to_string())
+                    .bind(version_to_i64(expected)?)
+                    .execute(&mut *tx)
+                    .await
+                }
+                .map_err(|error| adapter_error(&error))?
+                .rows_affected();
+                if affected != 1 {
+                    return Err(DddError::OptimisticLockConflict {
+                        aggregate: type_name::<A>(),
+                        expected,
+                        actual: actual.unwrap_or(0),
+                    });
+                }
+                for event in &events {
+                    sqlx::query(
+                        "INSERT INTO ddd4r_outbox \
+                         (event_id, aggregate_type, aggregate_id, aggregate_version, \
+                          event_type, envelope, status) VALUES (?, ?, ?, ?, ?, ?, 'pending')",
+                    )
+                    .bind(event.event_id.to_string())
+                    .bind(&event.aggregate_type)
+                    .bind(&event.aggregate_id)
+                    .bind(version_to_i64(event.aggregate_version)?)
+                    .bind(&event.event_type)
+                    .bind(serde_json::to_string(event)?)
+                    .execute(&mut *tx)
+                    .await
+                    .map_err(|error| adapter_error(&error))?;
+                }
+                Ok(())
+            }
+            .await;
+
+            if let Err(error) = result {
+                let _ = tx.rollback().await;
+                aggregate.set_version(expected);
+                return Err(error);
+            }
+            if let Err(error) = tx.commit().await {
+                aggregate.set_version(expected);
+                return Err(adapter_error(&error));
+            }
+            aggregate.clear_events();
+            Ok(())
+        })
+    }
+
+    fn pending_outbox_events(
+        &self,
+    ) -> BoxFuture<'_, DddResult<Vec<ddd4r_core::event::EventEnvelope>>> {
+        Box::pin(async move {
+            let envelopes = sqlx::query_scalar::<_, String>(
+                "SELECT envelope FROM ddd4r_outbox WHERE status = 'pending' ORDER BY rowid",
+            )
+            .fetch_all(&self.pool)
+            .await
+            .map_err(|error| adapter_error(&error))?;
+            envelopes
+                .into_iter()
+                .map(|envelope| serde_json::from_str(&envelope).map_err(Into::into))
+                .collect()
+        })
     }
 }
 

@@ -3,11 +3,12 @@
 #![forbid(unsafe_code)]
 
 use ddd4r_core::domain::{AggregateRoot, DomainModel, Entity};
-use ddd4r_core::event::EventEnvelope;
+use ddd4r_core::event::{DomainEvent, EventEnvelope};
 use ddd4r_core::module::{ModuleDescriptor, ModuleMaturity};
 use ddd4r_core::query::{Condition, Operator, Order, Page, PropertyRef, Query};
 use ddd4r_core::repository::{Repository, RepositoryRow};
 use ddd4r_core::{DddError, DddResult};
+use futures::future::BoxFuture;
 use serde::{Deserialize, Serialize};
 
 /// Machine-readable migration descriptor.
@@ -100,8 +101,21 @@ pub trait DataBackend: Send + Sync + 'static {
     /// Supported database engines.
     fn databases(&self) -> &'static [DatabaseKind];
 
-    /// Implemented behaviors. A false flag prevents stable publication.
+    /// Implemented behaviors. Any `Planned` capability prevents stable publication.
     fn capabilities(&self) -> BackendCapabilities;
+}
+
+/// Repository extension that persists an aggregate and its buffered events atomically.
+pub trait TransactionalEventRepository<A>: Repository<A>
+where
+    A: AggregateRoot,
+{
+    /// Commits the aggregate and its current event buffer in one database transaction.
+    /// Events are removed from the aggregate only after the database commit succeeds.
+    fn save_with_outbox<'a>(&'a self, aggregate: &'a mut A) -> BoxFuture<'a, DddResult<()>>;
+
+    /// Returns committed outbox envelopes in insertion order for conformance and dispatching.
+    fn pending_outbox_events(&self) -> BoxFuture<'_, DddResult<Vec<EventEnvelope>>>;
 }
 
 /// Canonical aggregate used by every backend's executable conformance suite.
@@ -169,6 +183,17 @@ pub struct RepositoryConformanceReport {
     pub optimistic_lock: bool,
 }
 
+/// Evidence returned after a backend passes the transactional outbox contract.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct TransactionalOutboxConformanceReport {
+    /// Aggregate and event were committed together.
+    pub atomic_commit: bool,
+    /// A duplicate outbox event rolled the aggregate update back.
+    pub atomic_rollback: bool,
+    /// Aggregate events were cleared only after commit and retained after rollback.
+    pub event_buffer_lifecycle: bool,
+}
+
 /// Runs the same core repository behavior against any adapter implementation.
 pub async fn verify_repository_conformance(
     repository: &dyn Repository<ConformanceAggregate>,
@@ -223,6 +248,62 @@ pub async fn verify_repository_conformance(
         crud_and_batch: true,
         query_and_page: true,
         optimistic_lock: true,
+    })
+}
+
+/// Runs the same aggregate/outbox atomicity contract against any relational adapter.
+pub async fn verify_transactional_outbox_conformance(
+    repository: &dyn TransactionalEventRepository<ConformanceAggregate>,
+) -> DddResult<TransactionalOutboxConformanceReport> {
+    #[derive(Serialize)]
+    struct Created {
+        source: String,
+    }
+
+    impl DomainEvent for Created {
+        fn source(&self) -> String {
+            self.source.clone()
+        }
+    }
+
+    let mut aggregate = ConformanceAggregate::new("outbox-contract", "committed");
+    aggregate.record_event(&Created {
+        source: aggregate.id.clone(),
+    })?;
+    let duplicate = aggregate.recorded_events()[0].clone();
+    repository.save_with_outbox(&mut aggregate).await?;
+    let committed = repository.pending_outbox_events().await?;
+    if aggregate.version != 1
+        || aggregate.has_recorded_events()
+        || committed.as_slice() != [duplicate.clone()]
+    {
+        return Err(conformance_error("aggregate/outbox atomic commit failed"));
+    }
+
+    "must-roll-back".clone_into(&mut aggregate.name);
+    aggregate.recorded_events_mut().push(duplicate);
+    if repository.save_with_outbox(&mut aggregate).await.is_ok() {
+        return Err(conformance_error(
+            "duplicate outbox event did not fail the transaction",
+        ));
+    }
+    let persisted = repository
+        .find_by_id(&aggregate.id)
+        .await?
+        .ok_or_else(|| conformance_error("aggregate disappeared after rollback"))?;
+    if aggregate.version != 1
+        || aggregate.recorded_events().len() != 1
+        || persisted.version != 1
+        || persisted.name != "committed"
+        || repository.pending_outbox_events().await?.len() != 1
+    {
+        return Err(conformance_error("aggregate/outbox atomic rollback failed"));
+    }
+
+    Ok(TransactionalOutboxConformanceReport {
+        atomic_commit: true,
+        atomic_rollback: true,
+        event_buffer_lifecycle: true,
     })
 }
 

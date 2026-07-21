@@ -107,13 +107,16 @@ CORE_BEHAVIORS = {
     "ddd4j-ddd-rules-clean": ["Clean Architecture layer and framework rules"],
     "ddd4j-ddd-rules-cola": ["COLA layer and framework rules"],
     "ddd4j-data": [
-        "shared backend capability model and executable repository conformance suite"
+        "shared backend capability model and executable repository conformance suite",
+        "aggregate and outbox atomic commit and rollback conformance suite",
     ],
     "ddd4j-data-jpa": [
-        "SeaORM CRUD, query, page, optimistic lock, and explicit transaction adapter"
+        "SeaORM CRUD, query, page, optimistic lock, and explicit transaction adapter",
+        "transactional aggregate and outbox persistence",
     ],
     "ddd4j-data-mybatis": [
-        "RBatis CRUD, query, page, optimistic lock, and explicit transaction adapter"
+        "RBatis CRUD, query, page, optimistic lock, and explicit transaction adapter",
+        "transactional aggregate and outbox persistence",
     ],
 }
 

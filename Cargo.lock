@@ -436,6 +436,7 @@ name = "ddd4r-data"
 version = "0.1.0-alpha.1"
 dependencies = [
  "ddd4r-core",
+ "futures",
  "serde",
  "serde_json",
 ]
