@@ -2202,7 +2202,7 @@ dependencies = [
 [[package]]
 name = "rbatis-plus"
 version = "0.1.0-alpha.1"
-source = "git+https://github.com/rbatis-plus/rbatis-plus.git?rev=03cf088ec6bc324888e30c3238ef391f29cd240e#03cf088ec6bc324888e30c3238ef391f29cd240e"
+source = "git+https://github.com/rbatis-plus/rbatis-plus.git?rev=e553e7d2dd21060a8bf4adb7fa9f43943198a687#e553e7d2dd21060a8bf4adb7fa9f43943198a687"
 dependencies = [
  "rbatis-plus-core",
  "rbatis-plus-extension",
@@ -2212,7 +2212,7 @@ dependencies = [
 [[package]]
 name = "rbatis-plus-core"
 version = "0.1.0-alpha.1"
-source = "git+https://github.com/rbatis-plus/rbatis-plus.git?rev=03cf088ec6bc324888e30c3238ef391f29cd240e#03cf088ec6bc324888e30c3238ef391f29cd240e"
+source = "git+https://github.com/rbatis-plus/rbatis-plus.git?rev=e553e7d2dd21060a8bf4adb7fa9f43943198a687#e553e7d2dd21060a8bf4adb7fa9f43943198a687"
 dependencies = [
  "futures",
  "serde",
@@ -2223,7 +2223,7 @@ dependencies = [
 [[package]]
 name = "rbatis-plus-extension"
 version = "0.1.0-alpha.1"
-source = "git+https://github.com/rbatis-plus/rbatis-plus.git?rev=03cf088ec6bc324888e30c3238ef391f29cd240e#03cf088ec6bc324888e30c3238ef391f29cd240e"
+source = "git+https://github.com/rbatis-plus/rbatis-plus.git?rev=e553e7d2dd21060a8bf4adb7fa9f43943198a687#e553e7d2dd21060a8bf4adb7fa9f43943198a687"
 dependencies = [
  "aes-gcm",
  "base64",
@@ -2241,7 +2241,7 @@ dependencies = [
 [[package]]
 name = "rbatis-plus-macros"
 version = "0.1.0-alpha.1"
-source = "git+https://github.com/rbatis-plus/rbatis-plus.git?rev=03cf088ec6bc324888e30c3238ef391f29cd240e#03cf088ec6bc324888e30c3238ef391f29cd240e"
+source = "git+https://github.com/rbatis-plus/rbatis-plus.git?rev=e553e7d2dd21060a8bf4adb7fa9f43943198a687#e553e7d2dd21060a8bf4adb7fa9f43943198a687"
 dependencies = [
  "proc-macro2",
  "quote",

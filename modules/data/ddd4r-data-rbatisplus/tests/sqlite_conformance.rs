@@ -208,9 +208,11 @@ async fn native_mapper_executes_transactional_upsert_and_batch_rollback_contract
 #[test]
 fn security_pipeline_is_reexported_and_fails_closed_on_tampering() {
     use ddd4r_data_rbatisplus::{
-        AesGcmKeyRing, FieldCipher, PartialRowPolicy, RowSignatureService, SignatureScope,
-        VerificationOutcome,
+        AesGcmKeyRing, FieldCipher, InterceptorStage, PartialRowPolicy, RowSignatureService,
+        RowVerificationConfig, SecurePipelineBuilder, SignatureScope, VerificationOutcome,
     };
+    use std::collections::BTreeMap;
+    use std::sync::Arc;
 
     let cipher =
         AesGcmKeyRing::new("current", [("current".to_owned(), [9; 32])], [11; 32]).unwrap();
@@ -252,6 +254,37 @@ fn security_pipeline_is_reexported_and_fails_closed_on_tampering() {
                 PartialRowPolicy::RejectPartial,
             )
             .is_err()
+    );
+
+    let secure_cipher = Arc::new(
+        AesGcmKeyRing::new("current", [("current".to_owned(), [9; 32])], [11; 32]).unwrap(),
+    );
+    let secure_signer = Arc::new(
+        RowSignatureService::new("current", [("current".to_owned(), vec![5; 32])]).unwrap(),
+    );
+    let verification = RowVerificationConfig::new(
+        secure_signer,
+        vec!["id".to_owned(), "secret".to_owned()],
+        vec!["id".to_owned(), "secret".to_owned()],
+        SignatureScope::FullRow,
+        PartialRowPolicy::RejectPartial,
+        "signature_key",
+        "signature",
+    )
+    .unwrap();
+    let secure_chain = SecurePipelineBuilder::new(secure_cipher, verification)
+        .decrypt_fields(BTreeMap::from([(
+            "secret".to_owned(),
+            b"orders.secret".to_vec(),
+        )]))
+        .build()
+        .unwrap();
+    assert_eq!(
+        secure_chain.stages(),
+        [
+            InterceptorStage::ResultVerify,
+            InterceptorStage::ResultTransform
+        ]
     );
 }
 
