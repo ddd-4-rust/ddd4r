@@ -12,5 +12,7 @@
 - `REJECT_PARTIAL` 拒绝不可验签投影；`DEFERRED_RESIGN` 返回显式延迟补签状态。
 - `SecurePipelineBuilder` 保留加密、验签和解密阶段，拒绝缺失策略及覆盖关键阶段的 fail-open 装配。
 - SM4/HMAC-SM3 使用 `gm1.key-id.iv.ciphertext.tag` 信封并先验 MAC 后解密；ddd4j 默认适配路径因空 mode/padding/key/IV 无法形成稳定金标，迁移不宣称原始密文字节兼容。
-- 依赖发布执行 `cargo audit`、`cargo deny`、SBOM 和 provenance 检查。
+- 每次 push/PR 使用固定版本执行 `cargo audit --deny warnings` 与 `cargo deny check`；未知依赖来源、未许可许可证、通配版本和 RustSec advisory 均阻断构建。
+- 唯一临时 advisory 例外由 `tools/verify_supply_chain_policy.py` 同时校验 ID、`0.x` 版本线、CI 命令和 2026-09-30 截止日期；超期或进入 `1.x` 自动失败。
+- tag 发布使用 `cargo-cyclonedx 0.5.9` 聚合全部 84 个 package，生成无本机路径且可重复的 CycloneDX 1.5 SBOM，并由固定 SHA-256 的官方 CycloneDX CLI 0.32.0 校验 schema；源码包、SHA-256、SBOM 和 GitHub Sigstore provenance/SBOM attestation 一并发布。
 - 安全问题通过 GitHub Security Advisory 私下报告，不在公开 Issue 中携带利用细节。

@@ -53,3 +53,8 @@ Edition 2024 和 Tokio，并以 `MIT OR Apache-2.0` 双许可证发布。
 - [安全模型](./SECURITY_MODEL.md)
 
 `1.0.0` 只有在 82 项全部有实现、测试和兼容性证据，并通过发布门禁后才会发布。
+
+每个 `v*` tag 都必须经过完整测试、文档、许可证和 advisory 门禁，并产出源码归档、SHA-256、
+覆盖全部 84 个 Cargo package 的 CycloneDX 1.5 SBOM，以及 GitHub Sigstore 构建来源和 SBOM
+attestation。供应链策略见 [`SECURITY_MODEL.md`](./SECURITY_MODEL.md)，依赖例外和固定 revision
+见 [`COMPATIBILITY_MATRIX.md`](./COMPATIBILITY_MATRIX.md)。

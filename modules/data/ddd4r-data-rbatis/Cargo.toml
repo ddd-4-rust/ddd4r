@@ -21,7 +21,7 @@ futures.workspace = true
 rbatis.workspace = true
 rbatis-memcached = { workspace = true, optional = true }
 rbatis-r2dbc = { workspace = true, optional = true }
-rbatis-typehandlers-jsr310 = { git = "https://github.com/rbatis-plus/rbatis-typehandlers-jsr310.git", rev = "ac285d0b858738776362ff60368ba39638d08926" }
+rbatis-typehandlers-jsr310.workspace = true
 rbdc-sqlite.workspace = true
 rbs.workspace = true
 serde.workspace = true

@@ -1,0 +1,85 @@
+name: Release evidence
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  release-evidence:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+        with:
+          fetch-depth: 0
+      - uses: dtolnay/rust-toolchain@2c7215f132e9ebf062739d9130488b56d53c060c
+        with:
+          toolchain: 1.97.1
+          components: rustfmt, clippy
+      - name: Install pinned release tools
+        run: |
+          cargo install --locked --version 0.19.4 cargo-deny
+          cargo install --locked --version 0.22.2 cargo-audit
+          cargo install --locked --version 0.5.9 cargo-cyclonedx
+          curl --fail --location --output /tmp/cyclonedx-cli https://github.com/CycloneDX/cyclonedx-cli/releases/download/v0.32.0/cyclonedx-linux-x64
+          echo "454879e6a4a405c8a13bff49b8982adcb0596f3019b26b0811c66e4d7f0783e1  /tmp/cyclonedx-cli" | sha256sum --check
+          chmod +x /tmp/cyclonedx-cli
+      - name: Verify release gates
+        run: |
+          python3 tools/verify_port_manifest.py
+          python3 tools/verify_public_api_manifest.py
+          python3 tools/verify_supply_chain_policy.py
+          cargo fmt --all --check
+          cargo clippy --workspace --all-targets --all-features -- -D warnings
+          cargo test --workspace --all-features
+          RUSTDOCFLAGS="-D warnings" cargo doc --workspace --all-features --no-deps
+          cargo deny check
+          cargo audit --deny warnings --ignore RUSTSEC-2025-0134
+      - name: Generate CycloneDX workspace SBOM
+        run: |
+          python3 tools/generate_workspace_sbom.py
+          /tmp/cyclonedx-cli validate --input-file dist/ddd4r-workspace.cdx.json --input-format json --input-version v1_5 --fail-on-errors
+      - name: Build release evidence
+        run: |
+          git archive --format=tar.gz --prefix="ddd4r-${GITHUB_REF_NAME}/" --output="dist/ddd4r-${GITHUB_REF_NAME}-source.tar.gz" "${GITHUB_SHA}"
+          cd dist
+          sha256sum "ddd4r-${GITHUB_REF_NAME}-source.tar.gz" ddd4r-workspace.cdx.json > SHA256SUMS
+      - name: Attest build provenance
+        uses: actions/attest@f7c74d28b9d84cb8768d0b8ca14a4bac6ef463e6 # v4.2.0
+        with:
+          subject-path: dist/ddd4r-${{ github.ref_name }}-source.tar.gz
+      - name: Attest SBOM
+        uses: actions/attest@f7c74d28b9d84cb8768d0b8ca14a4bac6ef463e6 # v4.2.0
+        with:
+          subject-path: dist/ddd4r-${{ github.ref_name }}-source.tar.gz
+          sbom-path: dist/ddd4r-workspace.cdx.json
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: ddd4r-${{ github.ref_name }}-release-evidence
+          path: |
+            dist/ddd4r-${{ github.ref_name }}-source.tar.gz
+            dist/ddd4r-workspace.cdx.json
+            dist/SHA256SUMS
+          if-no-files-found: error
+          retention-days: 90
+      - name: Publish GitHub release evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
+            gh release create "${GITHUB_REF_NAME}" --verify-tag --generate-notes --title "${GITHUB_REF_NAME}"
+          fi
+          gh release upload "${GITHUB_REF_NAME}" \
+            "dist/ddd4r-${GITHUB_REF_NAME}-source.tar.gz" \
+            dist/ddd4r-workspace.cdx.json \
+            dist/SHA256SUMS \
+            --clobber

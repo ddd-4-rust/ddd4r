@@ -12,8 +12,8 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@master
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+      - uses: dtolnay/rust-toolchain@2c7215f132e9ebf062739d9130488b56d53c060c
         with:
           toolchain: 1.97.1
           components: rustfmt, clippy
@@ -31,3 +31,21 @@ jobs:
         env:
           RUSTDOCFLAGS: -D warnings
         run: cargo doc --workspace --all-features --no-deps
+
+  supply-chain:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+      - uses: dtolnay/rust-toolchain@2c7215f132e9ebf062739d9130488b56d53c060c
+        with:
+          toolchain: 1.97.1
+      - name: Install pinned supply-chain tools
+        run: |
+          cargo install --locked --version 0.19.4 cargo-deny
+          cargo install --locked --version 0.22.2 cargo-audit
+      - name: Check advisories, licenses, bans and sources
+        run: |
+          python3 tools/verify_supply_chain_policy.py
+          cargo deny check
+      - name: Audit lockfile
+        run: cargo audit --deny warnings --ignore RUSTSEC-2025-0134

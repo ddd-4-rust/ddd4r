@@ -22,10 +22,11 @@ dashmap = "6.1"
 futures = "0.3"
 proc-macro2 = "1"
 quote = "1"
-rbatis = { git = "https://github.com/rbatis-plus/rbatis.git", rev = "bc904e9aa78ab44d5d4ff03b13767262c0caffe8" }
-rbatis-memcached = { git = "https://github.com/rbatis-plus/rbatis-memcached.git", rev = "d2549b050c7271d0136f4d5d892faa114ffcfcd3" }
-rbatis-plus = { git = "https://github.com/rbatis-plus/rbatis-plus.git", rev = "b4ceb07ec8d64acaf151ef36621b324083e74a29" }
-rbatis-r2dbc = { git = "https://github.com/rbatis-plus/rbatis-r2dbc.git", rev = "c68d7db6b9fe78a01705635ac900fc71abe67f23" }
+rbatis = { version = "=4.9.6", git = "https://github.com/rbatis-plus/rbatis.git", rev = "bc904e9aa78ab44d5d4ff03b13767262c0caffe8" }
+rbatis-memcached = { version = "=0.1.0-alpha.1", git = "https://github.com/rbatis-plus/rbatis-memcached.git", rev = "d2549b050c7271d0136f4d5d892faa114ffcfcd3" }
+rbatis-plus = { version = "=0.1.0-alpha.1", git = "https://github.com/rbatis-plus/rbatis-plus.git", rev = "b4ceb07ec8d64acaf151ef36621b324083e74a29" }
+rbatis-r2dbc = { version = "=0.1.0-alpha.1", git = "https://github.com/rbatis-plus/rbatis-r2dbc.git", rev = "c68d7db6b9fe78a01705635ac900fc71abe67f23" }
+rbatis-typehandlers-jsr310 = { version = "=0.1.0-alpha.1", git = "https://github.com/rbatis-plus/rbatis-typehandlers-jsr310.git", rev = "ac285d0b858738776362ff60368ba39638d08926" }
 rbdc-sqlite = "=4.9.5"
 rbs = "4"
 sea-orm = { version = "2.0.0", default-features = false, features = ["runtime-tokio-rustls", "sqlx-sqlite"] }
@@ -38,6 +39,11 @@ time = { version = "0.3", features = ["serde", "formatting", "parsing"] }
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "sync", "time"] }
 tracing = "0.1"
 uuid = { version = "1", features = ["serde", "v7"] }
+
+[patch.crates-io]
+# Temporary security patch for RUSTSEC-2026-0002. Remove after rbatis/rbdc#13
+# is released on crates.io.
+rbdc = { git = "https://github.com/rbatis-plus/rbdc.git", rev = "10696c3bd5da7390275e4724e9d22c0da83c45d3" }
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
