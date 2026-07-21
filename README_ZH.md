@@ -22,6 +22,10 @@ Edition 2024 和 Tokio，并以 `MIT OR Apache-2.0` 双许可证发布。
 - 三个适配器都独立通过 CRUD、批量、条件、排序、分页、乐观锁和显式事务测试。
 - `TransactionalEventRepository` 保证聚合与事件信封同库原子提交；重复事件导致写入失败时，
   聚合更新回滚、事件缓冲保留，三后端执行同一份原子性测试。
+- `rbatis-memcached` 提供 generation、CAS、TTL、一致性哈希和健康检查，并通过真实
+  Memcached 1.6 容器契约。
+- `rbatis-r2dbc` 将 RBDC 原生行流提升为强类型、有界预取、取消可传播的 `Stream`，并提供
+  commit/rollback/Drop 回滚事务作用域；RBatis Hook 已提交上游 PR #623。
 
 三套后端当前都只完成 SQLite 纵切；事务 Outbox 原子写入已为 `Supported`，但 claim、重试
 和死信调度仍由后续持久化 `OutboxStore` 补齐。逻辑删除、租户、数据权限、审计和 Event

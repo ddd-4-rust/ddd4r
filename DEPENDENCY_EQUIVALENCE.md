@@ -14,6 +14,7 @@
 | Caffeine | Moka | 保留 `rbatis-caffeine` 兼容名称 |
 | Redis | redis-rs | generation token + 可选 Pub/Sub |
 | Memcached | memcache | generation key + CAS，不扫描 key |
+| R2DBC | RBatis + RBDC `exec_rows` + futures `Stream` | 保留 `rbatis-r2dbc` 迁移名，不重复实现数据库协议 |
 | ArchUnit | cargo_metadata、guppy、syn | Cargo 图与源码 AST 联合检查 |
 | SLF4J / Micrometer / OTel | tracing、metrics、opentelemetry | tracing 为统一观测门面 |
 | Spring MVC / WebFlux / Javalin | Actix Web、Axum | 共用 Web conformance suite |

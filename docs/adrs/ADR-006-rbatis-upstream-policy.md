@@ -17,3 +17,9 @@
 ## 影响
 
 所有补丁必须有独立契约测试和上游 PR 链接。
+
+## 实施证据
+
+首个补丁固定为 `bc904e9aa78ab44d5d4ff03b13767262c0caffe8`，将 RBDC `exec_rows`
+提升为 RBatis 有界 `QueryStream`，覆盖逐行读取、取消后连接释放和不兼容拦截器拒绝测试；
+对应 [rbatis/rbatis#623](https://github.com/rbatis/rbatis/pull/623)。

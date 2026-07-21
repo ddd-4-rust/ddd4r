@@ -51,6 +51,11 @@ rust = ["memcache"]
 decision = "Use generation keys and CAS; never depend on key scans."
 
 [[dependency]]
+java = "R2DBC"
+rust = ["rbatis", "rbdc", "futures"]
+decision = "Keep the rbatis-r2dbc migration name while using native RBDC row streams, bounded prefetch, cancellation, and owned async transactions."
+
+[[dependency]]
 java = "ArchUnit"
 rust = ["cargo_metadata", "guppy", "syn"]
 decision = "Architecture rules run through cargo xtask and inspect dependency and source graphs."

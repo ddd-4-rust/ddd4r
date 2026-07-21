@@ -1,4 +1,4 @@
-//! `RBatis` repository adapter backed by the official 4.9 executor API.
+//! `RBatis` repository adapter backed by the pinned 4.9 executor API.
 
 #![forbid(unsafe_code)]
 
@@ -25,6 +25,14 @@ use serde::de::DeserializeOwned;
 
 /// JSR-310 migration types pinned from the `rbatis-plus` extension ecosystem.
 pub use rbatis_typehandlers_jsr310 as time_types;
+
+/// Java R2DBC migration surface backed by native bounded RBDC row streams.
+#[cfg(feature = "r2dbc")]
+pub use rbatis_r2dbc as reactive;
+
+/// Memcached second-level cache backend with generation and CAS semantics.
+#[cfg(feature = "memcached-cache")]
+pub use rbatis_memcached as memcached_cache;
 
 const ADAPTER: &str = "rbatis-sqlite";
 

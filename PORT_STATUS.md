@@ -23,9 +23,9 @@
 | 应用级 Cache | 进行中 | 内存 Cache、TTL、CAS、Stats |
 | 数据后端共享契约 | 进行中 | 三后端独立执行统一 CRUD/query/page/optimistic-lock 与 aggregate/outbox 原子性 conformance suite |
 | SQLx | 进行中 | SQLx 0.9 + SQLite 仓储、显式事务、事务 Outbox 原子提交/回滚已通过；其余数据库和高级能力未完成 |
-| RBatis | 进行中 | RBatis 4.9.6 + RBDC SQLite 仓储、显式事务、事务 Outbox 原子提交/回滚已通过；高级能力未完成 |
+| RBatis | 进行中 | RBatis 4.9.6 + 固定 fork `bc904e9a`；RBDC SQLite 仓储、显式事务、事务 Outbox 与原生有界行流已通过；[上游 PR #623](https://github.com/rbatis/rbatis/pull/623) 待合并 |
 | SeaORM | 进行中 | SeaORM 2.0 + SQLite 仓储、显式事务、事务 Outbox 原子提交/回滚已通过；高级能力未完成 |
-| RBatis 扩展族 | 进行中 | cache-core、caffeine、redis、typehandlers-jsr310 已独立建仓并固定 revision；Redis Standalone 与时间全 feature 测试通过，Cluster/Sentinel 与其余扩展未完成 |
+| RBatis 扩展族 | 进行中 | cache-core、caffeine、redis、memcached、r2dbc、typehandlers-jsr310 已独立建仓并固定 revision；Memcached 真实服务、R2DBC SQLite、Redis Standalone 与时间全 feature 测试通过；rbatis-plus 本体及 Redis Cluster/Sentinel 拓扑仍未完成 |
 | Web/Auth/MQ/Runtime | 计划中 | 逐模块移植 |
 
 任何没有实现和测试证据的包都不能标记为 `complete`，也不能计入 `1.0.0` 发布门禁。

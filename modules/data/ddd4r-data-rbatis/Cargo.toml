@@ -9,11 +9,18 @@ authors.workspace = true
 repository.workspace = true
 publish = false
 
+[features]
+default = []
+memcached-cache = ["dep:rbatis-memcached"]
+r2dbc = ["dep:rbatis-r2dbc"]
+
 [dependencies]
 ddd4r-core = { path = "../../../crates/ddd4r-core", version = "=0.1.0-alpha.1" }
 ddd4r-data = { path = "../ddd4r-data", version = "=0.1.0-alpha.1" }
 futures.workspace = true
 rbatis.workspace = true
+rbatis-memcached = { workspace = true, optional = true }
+rbatis-r2dbc = { workspace = true, optional = true }
 rbatis-typehandlers-jsr310 = { git = "https://github.com/rbatis-plus/rbatis-typehandlers-jsr310.git", rev = "ac285d0b858738776362ff60368ba39638d08926" }
 rbdc-sqlite.workspace = true
 rbs.workspace = true
