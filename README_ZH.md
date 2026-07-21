@@ -29,8 +29,8 @@ Edition 2024 和 Tokio，并以 `MIT OR Apache-2.0` 双许可证发布。
   聚合更新回滚、事件缓冲保留，三后端执行同一份原子性测试。
 - `rbatis-memcached` 提供 generation、CAS、TTL、一致性哈希和健康检查，并通过真实
   Memcached 1.6 容器契约。
-- `rbatis-r2dbc` 将 RBDC 原生行流提升为强类型、有界预取、取消可传播的 `Stream`，并提供
-  commit/rollback/Drop 回滚事务作用域；RBatis Hook 已提交上游 PR #623。
+- `rbatis-r2dbc` 将组织内 RBDC fork 的原生行流提升为强类型、有界预取、取消可传播的
+  `Stream`，并提供 commit/rollback/Drop 回滚事务作用域；外部上游写操作被明确禁止。
 - `rbatis-plus` 已建立 core/macros/extension/codegen/facade 五 crate 纵切，原生 Mapper 已执行
   CRUD、事务化批量插入/更新/混合 Upsert、分页、强类型 Query/Update Wrapper、乐观锁与逻辑删除；
   ddd4r 适配包同时通过该 Mapper 的真实 SQLite 回滚验收和共享 Repository/事务 Outbox 契约。

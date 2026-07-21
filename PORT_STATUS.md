@@ -23,7 +23,7 @@
 | 应用级 Cache | 进行中 | 内存 Cache、TTL、CAS、Stats |
 | 数据后端共享契约 | 进行中 | 三后端独立执行统一 CRUD/query/page/optimistic-lock 与 aggregate/outbox 原子性 conformance suite |
 | SQLx | 进行中 | SQLx 0.9 + SQLite 仓储、显式事务、事务 Outbox 原子提交/回滚已通过；其余数据库和高级能力未完成 |
-| RBatis | 进行中 | RBatis 4.9.6 + 固定 fork `bc904e9a`；RBDC SQLite 仓储、显式事务、事务 Outbox 与原生有界行流已通过；[上游 PR #623](https://github.com/rbatis/rbatis/pull/623) 待合并 |
+| RBatis | 进行中 | RBatis 4.9.6 + 组织内固定 fork `bc904e9a`；RBDC SQLite 仓储、显式事务、事务 Outbox 与原生有界行流已通过；禁止未授权的外部 PR/Issue/评论 |
 | SeaORM | 进行中 | SeaORM 2.0 + SQLite 仓储、显式事务、事务 Outbox 原子提交/回滚已通过；高级能力未完成 |
 | RBatis 扩展族 | 进行中 | 独立仓库均固定 revision；rbatis-plus 原生 Mapper 已完成事务化批量更新/混合 Upsert、fail-closed 安全装配及认证型 SM4/HMAC-SM3 Provider；SQLite 回滚、安全管线和 Outbox 契约通过；四数据库及 Redis Cluster/Sentinel 拓扑仍未完成 |
 | Auth 核心 | 已完成 | 对象安全异步 `Subject`、可替换 `SessionStore`、Tokio task-local `SubjectScope`、RBAC、Bearer、禁用/超时/轮换和并发登录策略；取消、panic 与并发隔离测试通过 |

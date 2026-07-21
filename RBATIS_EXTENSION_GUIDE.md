@@ -10,8 +10,9 @@ RBatis 相关项目归属 `rbatis-plus` 组织，ddd4r 只依赖其公开 crate�
 - `rbatis-typehandlers-jsr310`
 - `rbatis-plus`
 
-RBatis 本体缺少事务提交回调或逐行流式读取 Hook 时，在 `rbatis-plus/rbatis` 维护最小补丁并同步提交上游。
-扩展合并前固定 commit revision；上游发布后切回官方 crate。
+RBatis 本体缺少事务提交回调或逐行流式读取 Hook 时，只在 `rbatis-plus/rbatis` 维护最小补丁并固定
+commit revision。未经项目所有者逐次明确授权，不得向 RBatis、RBDC 或其他外部开源项目提交 PR、
+Issue、评论或任何写操作；是否切回官方 crate 只依据公开发布版本的兼容性验证结果。
 
 缓存一致性、拦截器顺序、时间类型映射和 rbatis-plus 能力细节以 ADR 和各独立扩展仓库的契约测试为准。
 
@@ -19,7 +20,7 @@ RBatis 本体缺少事务提交回调或逐行流式读取 Hook 时，在 `rbati
 
 | 仓库 | 固定 revision | 已验证能力 | 状态 |
 |---|---|---|---|
-| [`rbatis`](https://github.com/rbatis-plus/rbatis) | `bc904e9aa78ab44d5d4ff03b13767262c0caffe8` | RBDC 原生逐行流、非零有界预取、取消传播、连接释放、拦截器 fail-closed | fork revision 已固定；[上游 PR #623](https://github.com/rbatis/rbatis/pull/623) |
+| [`rbatis`](https://github.com/rbatis-plus/rbatis) | `bc904e9aa78ab44d5d4ff03b13767262c0caffe8` | RBDC 原生逐行流、非零有界预取、取消传播、连接释放、拦截器 fail-closed | 仅维护组织内 fork；禁止未授权的外部写操作 |
 | [`rbatis-cache-core`](https://github.com/rbatis-plus/rbatis-cache-core) | `8028de4ceee63d98cf7f5ef4695ba59d0c4656e6` | SQL AST 表标签、BLAKE3 Key、MessagePack、事务绕过、generation、singleflight、fail-open、metrics | alpha 已推送 |
 | [`rbatis-caffeine`](https://github.com/rbatis-plus/rbatis-caffeine) | `34921f2c79c10bf1237fce767bda9af18368bb5f` | Moka async、TTL、TTI、字节权重、TinyLFU、本地 generation、metrics | alpha 已推送 |
 | [`rbatis-redis`](https://github.com/rbatis-plus/rbatis-redis) | `761e4d1b77b651b15eb50556333b8fdf1c84fe2d` | Standalone 真实 Redis 8.4 契约；Cluster/Sentinel 连接、PSETEX、INCR、Pub/Sub、超时、熔断、metrics | alpha 已推送；Cluster/Sentinel 拓扑测试待补 |
@@ -32,8 +33,8 @@ RBatis 本体缺少事务提交回调或逐行流式读取 Hook 时，在 `rbati
 `memcached-cache`、`r2dbc` feature 暴露两个兼容入口；全 feature 门禁会编译并测试固定 revision。
 
 `rbatis-plus` 当前完成原生 Mapper 与安全管线的 alpha 纵切，尚未达到 MyBatis-Plus/Enhance 完整语义；Redis
-Cluster/Sentinel 也尚未取得真实拓扑证据，不能从 Standalone 测试推断完成。RBatis 上游 PR
-合并发布后，需要在同一兼容矩阵变更中切回官方版本。
+Cluster/Sentinel 也尚未取得真实拓扑证据，不能从 Standalone 测试推断完成。官方版本若公开提供
+等价 Hook，需要先在同一兼容矩阵中验证，再决定是否切回；该过程不包含外部 PR 或 Issue 操作。
 
 ddd4j 冻结基线的 `DefaultEncryptedFieldHandler` 将 mode、padding、key 和 IV 作为 `null`
 传给策略，而其缓存键和 Base64 路径不能稳定执行。因此 `gm1` 信封保留 SM4/HMAC-SM3
