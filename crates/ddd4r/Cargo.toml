@@ -9,17 +9,19 @@ authors.workspace = true
 repository.workspace = true
 
 [features]
-default = ["macros"]
+default = ["macros", "observability"]
 macros = ["dep:ddd4r-annotation"]
+observability = ["dep:ddd4r-observability"]
 cache = ["dep:ddd4r-cache"]
 outbox = ["dep:ddd4r-outbox"]
-full = ["macros", "cache", "outbox"]
+full = ["macros", "observability", "cache", "outbox"]
 
 [dependencies]
 ddd4r-annotation = { path = "../ddd4r-annotation", version = "=0.1.0-alpha.1", optional = true }
 ddd4r-cache = { path = "../ddd4r-cache", version = "=0.1.0-alpha.1", optional = true }
 ddd4r-core = { path = "../ddd4r-core", version = "=0.1.0-alpha.1" }
 ddd4r-kit = { path = "../ddd4r-kit", version = "=0.1.0-alpha.1" }
+ddd4r-observability = { path = "../ddd4r-observability", version = "=0.1.0-alpha.1", optional = true }
 ddd4r-outbox = { path = "../ddd4r-outbox", version = "=0.1.0-alpha.1", optional = true }
 
 [lints]

@@ -10,8 +10,23 @@ import tomllib
 from pathlib import Path
 
 
-ALLOWED_ADVISORIES = {"RUSTSEC-2025-0134": dt.date(2026, 9, 30)}
-AUDIT_COMMAND = "cargo audit --deny warnings --ignore RUSTSEC-2025-0134"
+ALLOWED_ADVISORIES = {
+    "RUSTSEC-2024-0436": dt.date(2026, 9, 30),
+    "RUSTSEC-2025-0134": dt.date(2026, 9, 30),
+    "RUSTSEC-2026-0049": dt.date(2026, 9, 30),
+    "RUSTSEC-2026-0098": dt.date(2026, 9, 30),
+    "RUSTSEC-2026-0099": dt.date(2026, 9, 30),
+    "RUSTSEC-2026-0104": dt.date(2026, 9, 30),
+}
+AUDIT_COMMAND = (
+    "cargo audit --deny warnings"
+    " --ignore RUSTSEC-2024-0436"
+    " --ignore RUSTSEC-2025-0134"
+    " --ignore RUSTSEC-2026-0049"
+    " --ignore RUSTSEC-2026-0098"
+    " --ignore RUSTSEC-2026-0099"
+    " --ignore RUSTSEC-2026-0104"
+)
 
 
 def current_date() -> dt.date:

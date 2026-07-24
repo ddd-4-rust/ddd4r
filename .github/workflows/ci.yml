@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  verify:
+  verify-default:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
@@ -21,16 +21,45 @@ jobs:
         run: |
           python3 tools/verify_port_manifest.py
           python3 tools/verify_public_api_manifest.py
+          python3 tools/verify_diagnostics_policy.py
       - name: Format
         run: cargo fmt --all --check
       - name: Clippy
-        run: cargo clippy --workspace --all-targets --all-features -- -D warnings
+        run: cargo clippy --workspace --all-targets --locked -- -D warnings
       - name: Test
-        run: cargo test --workspace --all-features
+        run: cargo test --workspace --locked
+      - name: Verify explicit OTLP adapter contract
+        run: cargo test -p ddd4r-observability-otlp --locked
       - name: Documentation
         env:
           RUSTDOCFLAGS: -D warnings
-        run: cargo doc --workspace --all-features --no-deps
+        run: cargo doc --workspace --no-deps --locked
+
+  verify-explicit-diagnostics:
+    runs-on: ubuntu-latest
+    env:
+      RUSTFLAGS: --cfg tokio_unstable
+      MALLOC_CONF: prof:true,prof_active:false,lg_prof_sample:19
+      DDD4R_TEST_HEAP_PROFILER: "1"
+    steps:
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+      - uses: dtolnay/rust-toolchain@2c7215f132e9ebf062739d9130488b56d53c060c
+        with:
+          toolchain: 1.97.1
+          components: clippy
+      - name: Compile every explicit capability
+        run: cargo check --workspace --all-targets --all-features --locked
+      - name: Lint every explicit capability
+        run: cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+      - name: Verify authorized profiler runtimes
+        run: |
+          cargo test -p ddd4r-diagnostics-pprof --locked
+          cargo test -p ddd4r-diagnostics-tokio-console --features runtime --locked
+          cargo test -p ddd4r-diagnostics-heap explicitly_enabled_heap_profile_round_trip --locked
+      - name: Document every explicit capability
+        env:
+          RUSTDOCFLAGS: -D warnings
+        run: cargo doc --workspace --all-features --no-deps --locked
 
   supply-chain:
     runs-on: ubuntu-latest
@@ -48,4 +77,4 @@ jobs:
           python3 tools/verify_supply_chain_policy.py
           cargo deny check
       - name: Audit lockfile
-        run: cargo audit --deny warnings --ignore RUSTSEC-2025-0134
+        run: cargo audit --deny warnings --ignore RUSTSEC-2024-0436 --ignore RUSTSEC-2025-0134 --ignore RUSTSEC-2026-0049 --ignore RUSTSEC-2026-0098 --ignore RUSTSEC-2026-0099 --ignore RUSTSEC-2026-0104

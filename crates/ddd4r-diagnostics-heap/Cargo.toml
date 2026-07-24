@@ -1,0 +1,22 @@
+[package]
+name = "ddd4r-diagnostics-heap"
+description = "Explicitly compiled and authorized jemalloc heap profiling for ddd4r"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+ddd4r-diagnostics = { path = "../ddd4r-diagnostics", version = "=0.1.0-alpha.1" }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+jemalloc_pprof.workspace = true
+tikv-jemallocator.workspace = true
+
+[dev-dependencies]
+tokio.workspace = true
+
+[lints]
+workspace = true

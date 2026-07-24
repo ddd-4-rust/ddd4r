@@ -12,6 +12,9 @@ pub use ddd4r_annotation::{DomainModel, Entity, ValueObject};
 #[cfg(feature = "cache")]
 pub use ddd4r_cache as cache;
 
+#[cfg(feature = "observability")]
+pub use ddd4r_observability as observability;
+
 #[cfg(feature = "outbox")]
 pub use ddd4r_outbox as outbox;
 
@@ -21,4 +24,7 @@ pub mod prelude {
 
     #[cfg(feature = "macros")]
     pub use ddd4r_annotation::{DomainModel, Entity, ValueObject};
+
+    #[cfg(feature = "observability")]
+    pub use ddd4r_observability::prelude::*;
 }

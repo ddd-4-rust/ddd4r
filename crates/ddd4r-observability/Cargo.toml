@@ -1,0 +1,26 @@
+[package]
+name = "ddd4r-observability"
+description = "Default tracing, metrics, and health runtime for ddd4r applications"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+metrics.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+[dev-dependencies]
+criterion.workspace = true
+
+[[bench]]
+name = "observability"
+harness = false
+
+[lints]
+workspace = true

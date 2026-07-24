@@ -19,8 +19,17 @@ categories = ["development-tools", "asynchronous"]
 [workspace.dependencies]
 blake3 = "1"
 cargo_metadata = "0.23.1"
+criterion = "0.8.2"
 dashmap = "6.1"
 futures = "0.3"
+jemalloc_pprof = "0.9.0"
+metrics = "0.24.6"
+opentelemetry = { version = "0.32.0", default-features = false }
+opentelemetry-appender-tracing = { version = "0.32.0", default-features = false }
+opentelemetry-otlp = { version = "0.32.0", default-features = false }
+opentelemetry-semantic-conventions = "0.32.0"
+opentelemetry_sdk = { version = "0.32.0", default-features = false }
+pprof = { version = "0.15.0", default-features = false, features = ["frame-pointer", "prost-codec"] }
 proc-macro2 = "1"
 quote = "1"
 rbatis = { version = "=4.9.6", git = "https://github.com/rbatis-plus/rbatis.git", rev = "bc904e9aa78ab44d5d4ff03b13767262c0caffe8" }
@@ -30,6 +39,7 @@ rbatis-r2dbc = { version = "=0.1.0-alpha.1", git = "https://github.com/rbatis-pl
 rbatis-typehandlers-jsr310 = { version = "=0.1.0-alpha.1", git = "https://github.com/rbatis-plus/rbatis-typehandlers-jsr310.git", rev = "ac285d0b858738776362ff60368ba39638d08926" }
 rbdc-sqlite = "=4.9.5"
 rbs = "4"
+rumqttc = "0.25.1"
 sea-orm = { version = "2.0.0", default-features = false, features = ["runtime-tokio-rustls", "sqlx-sqlite"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
@@ -37,10 +47,19 @@ sqlx = { version = "0.9.0", default-features = false, features = ["runtime-tokio
 syn = { version = "2", features = ["full", "extra-traits", "visit"] }
 thiserror = "2"
 time = { version = "0.3", features = ["serde", "formatting", "parsing"] }
+tikv-jemallocator = { version = "0.7.0", features = ["profiling"] }
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "sync", "time"] }
 tracing = "0.1"
+tracing-opentelemetry = { version = "0.33.0", default-features = false }
+tracing-subscriber = { version = "0.3.23", features = ["env-filter", "fmt", "json"] }
+url = "2"
 uuid = { version = "1", features = ["serde", "v7"] }
 zeroize = "1"
+
+[profile.profiling]
+inherits = "release"
+debug = 1
+strip = "none"
 
 [patch.crates-io]
 # Organization-owned security patch for RUSTSEC-2026-0002. Remove after an official

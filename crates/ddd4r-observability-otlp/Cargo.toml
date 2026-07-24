@@ -1,0 +1,36 @@
+[package]
+name = "ddd4r-observability-otlp"
+description = "Explicit OTLP trace, metric, and log export for ddd4r observability"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+ddd4r-observability = { path = "../ddd4r-observability", version = "=0.1.0-alpha.1" }
+metrics.workspace = true
+opentelemetry = { workspace = true, features = ["logs", "metrics", "trace"] }
+opentelemetry-appender-tracing.workspace = true
+opentelemetry-otlp = { workspace = true, features = [
+    "http-proto",
+    "logs",
+    "metrics",
+    "reqwest-blocking-client",
+    "reqwest-rustls-webpki-roots",
+    "trace",
+] }
+opentelemetry-semantic-conventions.workspace = true
+opentelemetry_sdk = { workspace = true, features = ["logs", "metrics", "trace"] }
+thiserror.workspace = true
+tracing.workspace = true
+tracing-opentelemetry.workspace = true
+tracing-subscriber.workspace = true
+url.workspace = true
+
+[dev-dependencies]
+opentelemetry_sdk = { workspace = true, features = ["testing"] }
+
+[lints]
+workspace = true

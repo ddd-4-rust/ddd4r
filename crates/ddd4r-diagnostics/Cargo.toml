@@ -1,0 +1,16 @@
+[package]
+name = "ddd4r-diagnostics"
+description = "Authorization and audit boundary for privileged ddd4r diagnostics"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+thiserror.workspace = true
+tracing.workspace = true
+
+[lints]
+workspace = true
